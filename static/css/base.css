@@ -1,0 +1,17 @@
+.aviso {
+    display: block;
+    min-height: 18px;
+    margin-top: 8px;
+    color: #c0392b;
+    font-size: 0.9em;
+}
+
+.aviso.sucesso {
+    color: #1e7e34;
+}
+
+button:disabled,
+input[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}

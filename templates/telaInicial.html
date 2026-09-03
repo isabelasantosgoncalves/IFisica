@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block titulo %}Página inicial | IFísica{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/telaInicial.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<img src="{{ config.LOGO_URL }}" alt="Logo IFísica" width="100" class="img-canto">
+
+<header>
+    <img src="{{ url_for('static', filename='images/banner-ifisica.jpeg') }}"
+         alt="IFísica para docentes" width="200">
+
+    <nav class="horizontal">
+        <ul>
+            <li><a href="{{ url_for('pagina.telaInicial') }}">Página inicial</a></li>
+            <li><a href="#">Ajuda</a></li>
+            <li><a href="#">Configurações</a></li>
+            <li><a href="#">Sobre</a></li>
+            <li><a href="{{ url_for('auth.sair') }}">Sair</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h3>Olá, {{ nome }}!</h3>
+
+<section id="listaTurmas">
+    <h4>Suas turmas</h4>
+    <ul id="turmas"></ul>
+    <span id="aviso" class="aviso"></span>
+</section>
+
+<button class="fab" id="botaoMenu">☰</button>
+
+<div class="menu-vertical" id="menu">
+    <ul>
+        <li><a href="{{ url_for('pagina.novaTurma') }}">Turma</a></li>
+        <li><a href="#">Atividades</a></li>
+        <li><a href="#">Relatório</a></li>
+        <li><a href="#">Materiais de aula</a></li>
+    </ul>
+</div>
+
+<div id="rodape">
+    &copy; Copyright IFísica
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/telaInicial.js') }}"></script>
+{% endblock %}

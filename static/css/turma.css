@@ -1,0 +1,53 @@
+
+.botoes {
+    display: flex;
+    justify-content: space-between; 
+    margin-top: 20px;
+}
+.botoes input,
+.botoes button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #c87623;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.ladoalado {
+    gap: 20px;
+    font-family: Arial;
+    text-align: center;
+}
+
+.login {
+    font-family: Arial;
+    background-color: #3fa0d1;
+    width: 25%;
+    height: 60px;
+    border-radius: 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 55px auto 0 auto; 
+    color: rgb(68, 64, 64);
+}
+
+.login h4{
+    margin: 0;
+}
+.login input{
+    background: transparent;
+    border: none;
+    outline: none;
+
+    color: white;
+    font-size: 16px;
+    text-align: center;
+}
+
+.login input::placeholder{
+    color: rgb(220,220,220);
+}

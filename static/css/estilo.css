@@ -1,0 +1,38 @@
+
+.ladoalado {
+    display: flex;
+    gap: 20px;
+    font-family: Arial;
+}
+
+.login {
+    font-family: Arial;
+    background-color: #3fa0d1;
+    width: 100%;
+    padding: 40px 0;
+    text-align: center;
+    margin-top: 80px;
+}
+
+.login h2 {
+    margin-bottom: 15px;
+}
+
+.login button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #000000;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.login p {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+h4 {
+    color: black;
+}

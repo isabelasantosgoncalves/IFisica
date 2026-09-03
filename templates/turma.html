@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block titulo %}Nova turma | IFísica{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/turma.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<form id="formTurma" novalidate>
+    <div class="ladoalado">
+        {% include "_marca.html" %}
+        <h2>Dê um nome para sua turma:</h2>
+        <h5>Nome da turma:</h5>
+    </div>
+
+    <div class="login">
+        <input id="nomeTurma" name="nomeTurma" type="text" placeholder="Ex.: Fisicando" required>
+    </div>
+
+    <span id="aviso" class="aviso"></span>
+
+    <div class="botoes">
+        <a href="{{ url_for('pagina.telaInicial') }}">
+            <button type="button">Voltar</button>
+        </a>
+        <input type="submit" value="Enviar">
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/turma.js') }}"></script>
+{% endblock %}

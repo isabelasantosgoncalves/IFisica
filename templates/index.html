@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block titulo %}IFísica para Docentes{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<div class="ladoalado">
+    {% include "_marca.html" %}
+    <h2>IFísica <br> para docentes</h2>
+</div>
+
+<div class="login">
+    <h2>Crie sua conta</h2>
+    <a href="{{ url_for('pagina.cadastro') }}">
+        <button>Criar conta</button>
+    </a>
+    <h4>
+        <a href="{{ url_for('pagina.login') }}">Já tem uma conta? Fazer login</a>
+    </h4>
+</div>
+{% endblock %}

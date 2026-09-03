@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block titulo %}Como nos encontrou | IFísica{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/encontrou.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<form id="formOrigem" novalidate>
+    <div class="ladoalado">
+        <h2>Como você encontrou o IFísica?</h2>
+
+        <div class="turma">
+            {% for rotulo, imagem, largura in origens %}
+            {% if loop.index0 % 3 == 0 %}<div>{% endif %}
+
+            <input type="radio" name="origem" id="origem{{ loop.index }}" value="{{ rotulo }}">
+            <label for="origem{{ loop.index }}">
+                {{ rotulo }}
+                <img src="{{ imagem }}" alt="{{ rotulo }}" width="{{ largura }}">
+            </label>
+
+            {% if loop.index % 3 == 0 or loop.last %}</div>{% endif %}
+            {% endfor %}
+        </div>
+
+        <span id="aviso" class="aviso"></span>
+
+        <div class="botoes">
+            <a href="{{ url_for('pagina.escolaridade') }}">
+                <button type="button">Voltar</button>
+            </a>
+            <input type="submit" value="Enviar">
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/encontrou.js') }}"></script>
+{% endblock %}

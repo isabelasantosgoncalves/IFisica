@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block titulo %}Criar conta | IFísica{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<div class="ladoalado">
+    {% include "_marca.html" %}
+    <h2>IFísica <br> para docentes</h2>
+</div>
+
+<form id="formCadastro" novalidate>
+    <fieldset>
+        <legend>Dados Pessoais</legend>
+
+        <div>
+            <label for="nome">Nome:</label>
+            <input id="nome" name="nome" type="text" size="50" required>
+
+            <label for="contato">Contato:</label>
+            <input id="contato" name="contato" type="tel">
+        </div>
+        <br>
+
+        <div>
+            <label for="email">E-mail:</label>
+            <input id="email" name="email" type="email" size="50" required>
+
+            <label for="cpf">CPF:</label>
+            <input id="cpf" name="cpf" type="text">
+        </div>
+        <br>
+
+        <div>
+            <label for="senha">Senha:</label>
+            <input id="senha" name="senha" type="password" size="20" required>
+        </div>
+        <br>
+
+        <div>
+            <label for="nascimento">Data Nasc.:</label>
+            <input id="nascimento" name="dataNascimento" type="date">
+
+            <label for="naturalidade">Naturalidade:</label>
+            <input id="naturalidade" name="naturalidade" type="text" size="50">
+        </div>
+        <br>
+
+        <span id="aviso" class="aviso"></span>
+    </fieldset>
+
+    <div class="botoes">
+        <a href="{{ url_for('pagina.index') }}">
+            <button type="button">Voltar</button>
+        </a>
+        <input type="submit" value="Enviar">
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/cadastro.js') }}"></script>
+{% endblock %}
