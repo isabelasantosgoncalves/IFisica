@@ -1,4 +1,10 @@
 const formCadastro = document.getElementById("formCadastro");
+const seletorGenero = document.getElementById("genero");
+const campoAutodeclaracao = document.getElementById("campoAutodeclaracao");
+
+seletorGenero.addEventListener("change", () => {
+    campoAutodeclaracao.hidden = seletorGenero.value !== "autodeclaracao";
+});
 
 formCadastro.addEventListener("submit", async (evento) => {
     evento.preventDefault();
@@ -6,15 +12,10 @@ formCadastro.addEventListener("submit", async (evento) => {
 
     const dados = Object.fromEntries(new FormData(formCadastro));
 
-    if (!dados.nome || !dados.email || !dados.senha) {
-        mostrarAviso("Preencha nome, e-mail e senha.");
-        return;
-    }
-
     bloquear(formCadastro, true);
 
     try {
-        await enviarJson("/api/docentes", dados);
+        await enviarJson("/api/usuarios", dados);
         window.location.href = "/inicio";
     } catch (erro) {
         mostrarAviso(erro.message);

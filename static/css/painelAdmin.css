@@ -1,0 +1,172 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(46, 43, 43);
+    margin: 0;
+    padding: 24px;
+}
+
+.painel-topo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid #3fa0d1;
+}
+
+.painel-topo h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.painel-topo p {
+    margin: 4px 0 0;
+    color: #6b6b6b;
+    font-size: 0.9rem;
+}
+
+.painel-topo a {
+    margin-left: auto;
+}
+
+.painel-topo button {
+    padding: 10px 18px;
+    border: none;
+    background-color: #c87623;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.painel {
+    display: grid;
+    grid-template-columns: minmax(240px, 320px) 1fr;
+    gap: 24px;
+    margin-top: 24px;
+    align-items: start;
+}
+
+.coluna-lista h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+    font-size: 1rem;
+}
+
+.contador {
+    background-color: #3fa0d1;
+    color: white;
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 0.8rem;
+}
+
+.lista-pendentes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lista-pendentes button {
+    width: 100%;
+    text-align: left;
+    background-color: white;
+    border: 1px solid #d6dde2;
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.92rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.lista-pendentes button:hover,
+.lista-pendentes button:focus-visible {
+    border-color: #3fa0d1;
+    outline: none;
+}
+
+.lista-pendentes button[aria-current="true"] {
+    border-color: #3fa0d1;
+    background-color: #e4f0f7;
+}
+
+.lista-pendentes .email {
+    color: #6b6b6b;
+    font-size: 0.82rem;
+    word-break: break-all;
+}
+
+.coluna-detalhe {
+    background-color: white;
+    border: 1px solid #d6dde2;
+    border-radius: 8px;
+    padding: 20px 22px;
+    min-height: 220px;
+}
+
+.coluna-detalhe h3 {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+}
+
+.coluna-detalhe .email {
+    color: #6b6b6b;
+    font-size: 0.88rem;
+    margin: 0 0 18px;
+    word-break: break-all;
+}
+
+.campo {
+    margin-bottom: 16px;
+}
+
+.campo dt {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6b6b6b;
+    margin-bottom: 4px;
+}
+
+.campo dd {
+    margin: 0;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.decisao {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #e4e8eb;
+}
+
+.decisao button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.aprovar { background-color: #1e7e34; color: white; }
+.recusar { background-color: #c0392b; color: white; }
+
+.vazio {
+    color: #6b6b6b;
+    margin: 0;
+}
+
+@media (max-width: 720px) {
+    .painel { grid-template-columns: 1fr; }
+}

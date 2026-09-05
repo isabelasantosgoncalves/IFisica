@@ -115,3 +115,31 @@ header {
     margin: 30px 0;
     padding: 30px 0;
 }
+.papel {
+    font-family: Arial;
+    color: #6b6b6b;
+    margin-top: -6px;
+}
+
+#convite {
+    font-family: Arial;
+    max-width: 520px;
+    padding: 16px 18px;
+    background-color: #e4f0f7;
+    border-left: 4px solid #3fa0d1;
+    border-radius: 0 8px 8px 0;
+}
+
+#convite h4 { margin: 0 0 6px; }
+
+#convite p { margin: 0 0 12px; line-height: 1.5; }
+
+#convite button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #c87623;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}

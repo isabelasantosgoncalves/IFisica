@@ -4,13 +4,15 @@ formTurma.addEventListener("submit", (evento) => {
     evento.preventDefault();
     mostrarAviso("");
 
-    const nomeTurma = document.getElementById("nomeTurma").value.trim();
+    const nome = document.getElementById("nomeTurma").value.trim();
+    const descricao = document.getElementById("descricao").value.trim();
 
-    if (!nomeTurma) {
+    if (!nome) {
         mostrarAviso("Dê um nome para a turma.");
         return;
     }
 
-    sessionStorage.setItem("nomeTurma", nomeTurma);
+    sessionStorage.setItem("nome", nome);
+    sessionStorage.setItem("descricao", descricao);
     window.location.href = "/nova-turma/escolaridade";
 });

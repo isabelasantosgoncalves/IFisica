@@ -20,8 +20,8 @@
             <label for="nome">Nome:</label>
             <input id="nome" name="nome" type="text" size="50" required>
 
-            <label for="contato">Contato:</label>
-            <input id="contato" name="contato" type="tel">
+            <label for="telefone">Telefone:</label>
+            <input id="telefone" name="telefone" type="tel" required>
         </div>
         <br>
 
@@ -29,23 +29,33 @@
             <label for="email">E-mail:</label>
             <input id="email" name="email" type="email" size="50" required>
 
-            <label for="cpf">CPF:</label>
-            <input id="cpf" name="cpf" type="text">
+            <label for="dataNasc">Data Nasc.:</label>
+            <input id="dataNasc" name="dataNasc" type="date" required>
         </div>
         <br>
 
         <div>
             <label for="senha">Senha:</label>
-            <input id="senha" name="senha" type="password" size="20" required>
+            <input id="senha" name="senha" type="password" size="20"
+                   minlength="6" required>
         </div>
         <br>
 
         <div>
-            <label for="nascimento">Data Nasc.:</label>
-            <input id="nascimento" name="dataNascimento" type="date">
+            <label for="genero">Gênero:</label>
+            <select id="genero" name="genero">
+                <option value="">Selecione (opcional)</option>
+                {% for codigo, rotulo in generos %}
+                <option value="{{ codigo }}">{{ rotulo }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
 
-            <label for="naturalidade">Naturalidade:</label>
-            <input id="naturalidade" name="naturalidade" type="text" size="50">
+        <div id="campoAutodeclaracao" hidden>
+            <label for="generoAutodeclarado">Como você se autodeclara:</label>
+            <input id="generoAutodeclarado" name="generoAutodeclarado"
+                   type="text" size="50" maxlength="120">
         </div>
         <br>
 

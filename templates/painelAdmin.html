@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block titulo %}Solicitações pendentes | IFísica{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/painelAdmin.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<header class="painel-topo">
+    {% include "_marca.html" %}
+    <div>
+        <h2>Solicitações de tutoria</h2>
+        <p>Analise os pedidos e libere as funcionalidades de tutor.</p>
+    </div>
+    <a href="{{ url_for('pagina.telaInicial') }}">
+        <button type="button">Página inicial</button>
+    </a>
+</header>
+
+<div class="painel">
+    <section class="coluna-lista">
+        <h3>Pendentes <span id="contador" class="contador">0</span></h3>
+        <ul id="listaPendentes" class="lista-pendentes"></ul>
+    </section>
+
+    <section id="detalhe" class="coluna-detalhe">
+        <p class="vazio">Selecione uma solicitação à esquerda.</p>
+    </section>
+</div>
+
+<span id="aviso" class="aviso"></span>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/painelAdmin.js') }}"></script>
+{% endblock %}

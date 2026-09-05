@@ -13,11 +13,11 @@
         <h2>Selecione nível de escolaridade da sua turma:</h2>
 
         <div class="turma">
-            {% for nivel in niveis %}
+            {% for codigo, rotulo in niveis %}
             <div>
-                <input type="radio" name="nivel" id="nivel{{ loop.index }}"
-                       value="{{ nivel }}" {% if loop.first %}checked{% endif %}>
-                <label for="nivel{{ loop.index }}">{{ nivel }}</label>
+                <input type="radio" name="nivel" id="nivel{{ codigo }}"
+                       value="{{ codigo }}" {% if loop.first %}checked{% endif %}>
+                <label for="nivel{{ codigo }}">{{ rotulo }}</label>
             </div>
             {% endfor %}
         </div>

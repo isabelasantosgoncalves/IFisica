@@ -12,11 +12,26 @@ document.addEventListener("click", (evento) => {
     }
 });
 
+function montarItem(turma) {
+    const item = document.createElement("li");
+
+    const titulo = document.createElement("strong");
+    titulo.textContent = turma.nome;
+
+    const detalhe = document.createElement("span");
+    detalhe.textContent = ` — ${turma.nivelRotulo}`;
+
+    item.append(titulo, detalhe);
+    return item;
+}
+
 async function carregarTurmas() {
     const lista = document.getElementById("turmas");
 
+    if (!lista) return;
+
     try {
-        const resposta = await fetch("/turmas");
+        const resposta = await fetch("/api/turmas");
 
         if (resposta.status === 401) {
             window.location.href = "/login";
@@ -30,9 +45,7 @@ async function carregarTurmas() {
             return;
         }
 
-        lista.innerHTML = turmas
-            .map((turma) => `<li>${turma.nomeTurma} — ${turma.nivelEscolaridade || "sem nível"}</li>`)
-            .join("");
+        lista.replaceChildren(...turmas.map(montarItem));
     } catch {
         mostrarAviso("Não foi possível carregar suas turmas.");
     }

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block titulo %}Quero ser tutor | IFísica{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/turma.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<div class="ladoalado">
+    {% include "_marca.html" %}
+    <h2>Solicitar permissão de tutor</h2>
+    <h5>Um administrador vai analisar o seu pedido.</h5>
+</div>
+
+<div id="situacao" class="situacao" hidden></div>
+
+<form id="formTutoria" novalidate>
+    <div class="descricao">
+        <label for="motivo">Por que você quer ser tutor?</label>
+        <textarea id="motivo" name="motivo" rows="3" maxlength="255" required
+                  placeholder="Ex.: leciono física no IFBA e quero acompanhar minhas turmas aqui"></textarea>
+    </div>
+
+    <div class="descricao">
+        <label for="conteudo">O que você pretende ensinar?</label>
+        <textarea id="conteudo" name="conteudo" rows="3" maxlength="255" required
+                  placeholder="Ex.: cinemática, leis de Newton e energia"></textarea>
+    </div>
+
+    <div class="descricao">
+        <label for="publicoAlvo">Para quem?</label>
+        <textarea id="publicoAlvo" name="publicoAlvo" rows="2" maxlength="255" required
+                  placeholder="Ex.: estudantes de 1º e 2º ano do ensino médio"></textarea>
+    </div>
+
+    <span id="aviso" class="aviso"></span>
+
+    <div class="botoes">
+        <a href="{{ url_for('pagina.telaInicial') }}">
+            <button type="button">Voltar</button>
+        </a>
+        <input type="submit" value="Enviar solicitação">
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/solicitarTutor.js') }}"></script>
+{% endblock %}

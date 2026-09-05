@@ -19,27 +19,49 @@
             <li><a href="#">Ajuda</a></li>
             <li><a href="#">Configurações</a></li>
             <li><a href="#">Sobre</a></li>
-            <li><a href="{{ url_for('auth.sair') }}">Sair</a></li>
+            <li><a href="{{ url_for('pagina.sair') }}">Sair</a></li>
         </ul>
     </nav>
 </header>
 
 <h3>Olá, {{ nome }}!</h3>
+<p class="papel">Seu papel na plataforma: <strong>{{ papel }}</strong></p>
 
+{% if ensina %}
 <section id="listaTurmas">
     <h4>Suas turmas</h4>
     <ul id="turmas"></ul>
     <span id="aviso" class="aviso"></span>
 </section>
+{% else %}
+<section id="convite">
+    <h4>Quer criar turmas?</h4>
+    <p>
+        Todo cadastro começa como estudante. Para criar turmas, peça permissão de tutor —
+        um administrador analisa o pedido.
+    </p>
+    <a href="{{ url_for('pagina.solicitarTutor') }}">
+        <button type="button">Quero ser tutor</button>
+    </a>
+    <span id="aviso" class="aviso"></span>
+</section>
+{% endif %}
 
 <button class="fab" id="botaoMenu">☰</button>
 
 <div class="menu-vertical" id="menu">
     <ul>
+        {% if ensina %}
         <li><a href="{{ url_for('pagina.novaTurma') }}">Turma</a></li>
         <li><a href="#">Atividades</a></li>
         <li><a href="#">Relatório</a></li>
         <li><a href="#">Materiais de aula</a></li>
+        {% else %}
+        <li><a href="{{ url_for('pagina.solicitarTutor') }}">Quero ser tutor</a></li>
+        {% endif %}
+        {% if administra %}
+        <li><a href="{{ url_for('pagina.painelAdmin') }}">Solicitações pendentes</a></li>
+        {% endif %}
     </ul>
 </div>
 

@@ -1,10 +1,13 @@
 const formEscolaridade = document.getElementById("formEscolaridade");
 
-formEscolaridade.addEventListener("submit", (evento) => {
+formEscolaridade.addEventListener("submit", async (evento) => {
     evento.preventDefault();
     mostrarAviso("");
 
-    if (!sessionStorage.getItem("nomeTurma")) {
+    const nome = sessionStorage.getItem("nome");
+    const descricao = sessionStorage.getItem("descricao");
+
+    if (!nome) {
         window.location.href = "/nova-turma";
         return;
     }
@@ -16,6 +19,17 @@ formEscolaridade.addEventListener("submit", (evento) => {
         return;
     }
 
-    sessionStorage.setItem("nivelEscolaridade", escolhido.value);
-    window.location.href = "/nova-turma/origem";
+    bloquear(formEscolaridade, true);
+
+    try {
+        await enviarJson("/api/turmas", { nome, descricao, nivel: escolhido.value });
+
+        sessionStorage.removeItem("nome");
+        sessionStorage.removeItem("descricao");
+
+        window.location.href = "/inicio";
+    } catch (erro) {
+        mostrarAviso(erro.message);
+        bloquear(formEscolaridade, false);
+    }
 });

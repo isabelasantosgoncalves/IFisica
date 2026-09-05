@@ -1,95 +1,92 @@
-from datetime import date
-
 import mysql.connector
-from flask import Blueprint, jsonify, redirect, request, session, url_for
+from flask import Blueprint, jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from database.db import conectar_banco
+from models import usuario as modelo_usuario
+from models.constantes import CODIGOS_GENERO, GENERO_AUTODECLARACAO
+from routes.seguranca import abrir_sessao
+from routes.utilitarios import texto_ou_nulo
 
 auth_bp = Blueprint("auth", __name__)
 
+OBRIGATORIOS = ("nome", "email", "telefone", "senha", "dataNasc")
 
-@auth_bp.route("/api/docentes", methods=["POST"])
-def cadastrar_docente():
 
-    dados = request.get_json()
+@auth_bp.route("/usuarios", methods=["POST"])
+def cadastrar_usuario():
 
-    nome = dados.get("nome")
-    email = dados.get("email")
-    senha = dados.get("senha")
-    contato = dados.get("contato")
-    cpf = dados.get("cpf")
-    data_nascimento = dados.get("dataNascimento")
-    naturalidade = dados.get("naturalidade")
+    dados = request.get_json(silent=True) or {}
 
-    if not nome or not email or not senha:
+    campos = {
+        chave: texto_ou_nulo(dados.get(chave))
+        for chave in OBRIGATORIOS
+    }
+
+    faltando = [chave for chave, valor in campos.items() if not valor]
+
+    if faltando:
         return jsonify({
-            "erro": "Nome, e-mail e senha são obrigatórios."
+            "erro": "Preencha todos os campos.",
+            "campos": faltando
         }), 400
 
-    if len(senha) < 6:
+    if len(campos["senha"]) < 6:
         return jsonify({
             "erro": "A senha deve ter pelo menos 6 caracteres."
         }), 400
 
-    try:
-        conexao = conectar_banco()
-        cursor = conexao.cursor()
+    genero = texto_ou_nulo(dados.get("genero"))
+    genero_autodeclarado = texto_ou_nulo(dados.get("generoAutodeclarado"))
 
-        sql = """
-            INSERT INTO Docente
-            (nome, email, senhaHash, contato, cpf,
-             dataNascimento, naturalidade, dataCadastro)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """
+    if genero and genero not in CODIGOS_GENERO:
+        return jsonify({"erro": "Opção de gênero inválida."}), 400
 
-        valores = (
-            nome,
-            email,
-            generate_password_hash(senha),
-            contato,
-            cpf,
-            data_nascimento or None,
-            naturalidade,
-            date.today()
-        )
-
-        cursor.execute(sql, valores)
-        conexao.commit()
-
-        id_docente = cursor.lastrowid
-
-        cursor.close()
-        conexao.close()
-
-        session["idDocente"] = id_docente
-        session["nomeDocente"] = nome
-
+    if genero == GENERO_AUTODECLARACAO and not genero_autodeclarado:
         return jsonify({
-            "mensagem": "Cadastro realizado com sucesso!",
-            "idDocente": id_docente
-        }), 201
+            "erro": "Escreva como você se autodeclara."
+        }), 400
+
+    if genero != GENERO_AUTODECLARACAO:
+        genero_autodeclarado = None
+
+    try:
+        id_usuario = modelo_usuario.criar(
+            campos["nome"],
+            campos["email"],
+            campos["telefone"],
+            generate_password_hash(campos["senha"]),
+            campos["dataNasc"],
+            genero,
+            genero_autodeclarado
+        )
 
     except mysql.connector.IntegrityError:
 
         return jsonify({
-            "erro": "Já existe um cadastro com esse e-mail ou CPF."
+            "erro": "Já existe um cadastro com esse e-mail ou telefone."
         }), 409
 
     except mysql.connector.Error as erro:
 
         return jsonify({
-            "erro": "Erro ao cadastrar docente.",
+            "erro": "Erro ao cadastrar usuário.",
             "detalhes": str(erro)
         }), 500
 
+    abrir_sessao(id_usuario, campos["nome"])
 
-@auth_bp.route("/api/login", methods=["POST"])
+    return jsonify({
+        "mensagem": "Cadastro realizado com sucesso!",
+        "idUsuario": id_usuario
+    }), 201
+
+
+@auth_bp.route("/login", methods=["POST"])
 def entrar():
 
-    dados = request.get_json()
+    dados = request.get_json(silent=True) or {}
 
-    email = dados.get("email")
+    email = texto_ou_nulo(dados.get("email"))
     senha = dados.get("senha")
 
     if not email or not senha:
@@ -98,31 +95,7 @@ def entrar():
         }), 400
 
     try:
-        conexao = conectar_banco()
-        cursor = conexao.cursor(dictionary=True)
-
-        cursor.execute(
-            "SELECT idDocente, nome, senhaHash FROM Docente WHERE email = %s",
-            (email,)
-        )
-
-        docente = cursor.fetchone()
-
-        cursor.close()
-        conexao.close()
-
-        if not docente or not check_password_hash(docente["senhaHash"], senha):
-            return jsonify({
-                "erro": "E-mail ou senha incorretos."
-            }), 401
-
-        session["idDocente"] = docente["idDocente"]
-        session["nomeDocente"] = docente["nome"]
-
-        return jsonify({
-            "mensagem": "Login realizado com sucesso!",
-            "nome": docente["nome"]
-        }), 200
+        usuario = modelo_usuario.buscar_por_email(email)
 
     except mysql.connector.Error as erro:
 
@@ -131,8 +104,14 @@ def entrar():
             "detalhes": str(erro)
         }), 500
 
+    if not usuario or not check_password_hash(usuario["senha"], senha):
+        return jsonify({
+            "erro": "E-mail ou senha incorretos."
+        }), 401
 
-@auth_bp.route("/logout")
-def sair():
-    session.clear()
-    return redirect(url_for("pagina.index"))
+    abrir_sessao(usuario["idUsuario"], usuario["nome"])
+
+    return jsonify({
+        "mensagem": "Login realizado com sucesso!",
+        "nome": usuario["nome"]
+    }), 200
