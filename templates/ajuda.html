@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block titulo %}Ajuda | IFísica{% endblock %}
+{% block titulo %}Guia prático | IFísica{% endblock %}
 
 {% block estilos %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/ajuda.css') }}">
@@ -18,44 +18,217 @@
     </a>
 </header>
 
-<section class="acoes">
-    <a class="botao-download"
-       href="{{ url_for('static', filename='docs/guia-pratico-ifisica.pdf') }}"
-       download>Baixar o guia em PDF</a>
-    <a class="link-simples"
-       href="{{ url_for('static', filename='docs/guia-pratico-ifisica.pdf') }}"
-       target="_blank" rel="noopener">Abrir em uma aba nova</a>
+<nav class="indice">
+    <a href="#comecar">Para começar</a>
+    <a href="#tutor">Virar tutor</a>
+    <a href="#sala">Criar uma sala</a>
+    <a href="#questoes">Questões e atividades</a>
+    <a href="#materiais">Materiais</a>
+    <a href="#aluno">Sou estudante</a>
+    <a href="#acompanhar">Acompanhar a turma</a>
+    <a href="#admin">Administrador</a>
+</nav>
+
+<section class="guia" id="comecar">
+    <h3>1. Para começar</h3>
+
+    <p>
+        Crie sua conta em <strong>Criar conta</strong>, na tela de abertura. São cinco campos
+        obrigatórios: nome, telefone, e-mail, data de nascimento e senha de pelo menos seis
+        caracteres. O campo de gênero é opcional — tem autodeclaração livre e a opção de não
+        informar, e o valor não muda nada no funcionamento.
+    </p>
+
+    <p class="atencao">
+        Todo cadastro entra como <strong>estudante</strong>. É assim de propósito: quem vai dar
+        aula precisa ser aprovado antes.
+    </p>
+
+    <p>
+        O e-mail é o que identifica sua conta no login e não pode ser trocado depois. A senha
+        é guardada com hash — nem quem tem acesso ao banco consegue lê-la.
+    </p>
 </section>
 
-<object class="visor"
-        data="{{ url_for('static', filename='docs/guia-pratico-ifisica.pdf') }}"
-        type="application/pdf">
-    <p class="sem-visor">
-        Seu navegador não consegue mostrar o PDF aqui dentro.
-        <a href="{{ url_for('static', filename='docs/guia-pratico-ifisica.pdf') }}">
-            Baixe o guia
-        </a>
-        para ler.
-    </p>
-</object>
+<section class="guia" id="tutor">
+    <h3>2. Virar tutor</h3>
 
-<section class="resumo">
-    <h3>Resumo rápido</h3>
+    <p>
+        Na página inicial, clique em <strong>Quero ser tutor</strong>. O formulário pede três
+        coisas: por que você quer ser tutor, o que pretende ensinar e para quem.
+    </p>
+
+    <p>
+        O pedido fica aguardando análise. Você não consegue enviar um segundo enquanto o
+        primeiro estiver pendente. Se for recusado, pode enviar outro.
+    </p>
+
+    <p>
+        Assim que um administrador aprovar, o menu muda sozinho: aparecem as opções de criar
+        sala, e a seção "Suas turmas" toma o lugar do convite.
+    </p>
+</section>
+
+<section class="guia" id="sala">
+    <h3>3. Criar uma sala</h3>
+
+    <p>São duas telas:</p>
+
+    <ol>
+        <li><strong>Nome e descrição</strong> da sala</li>
+        <li><strong>Nível de escolaridade</strong> — do 1º ano do ensino médio ao superior</li>
+    </ol>
+
+    <p>
+        Pronto: a sala é criada com um <strong>código de convite</strong> de oito caracteres,
+        que aparece no topo dela. Esse código é o que você passa para os estudantes. Tem um
+        botão para copiar.
+    </p>
+
+    <p>
+        Você não pode ter duas salas com o mesmo nome, mas outro tutor pode ter uma sala com
+        o mesmo nome que a sua.
+    </p>
+</section>
+
+<section class="guia" id="questoes">
+    <h3>4. Questões e atividades</h3>
+
+    <p>
+        Dentro da sala, na aba <strong>ATIVIDADES</strong>, tem o banco de questões e o
+        formulário de nova questão.
+    </p>
+
+    <h4>Criando uma questão</h4>
+
+    <ul>
+        <li>Enunciado, matéria e dificuldade</li>
+        <li>As quatro alternativas, marcando qual é a correta</li>
+        <li><strong>Imagem</strong> (opcional): gráfico, esquema, figura. JPG, PNG, GIF ou
+            WEBP, até 3 MB</li>
+        <li><strong>Resolução</strong> (opcional): a explicação que o estudante lê depois de
+            responder. Vale muito a pena preencher — é o que transforma o erro em aprendizado</li>
+    </ul>
+
+    <h4>Montando a atividade</h4>
+
+    <p>
+        Marque as questões que quer usar na lista do banco, dê um nome à atividade e salve.
+        A mesma questão pode entrar em várias atividades.
+    </p>
+
+    <p>
+        Questões e atividades podem ser editadas e excluídas a qualquer momento, pelos botões
+        em cada cartão.
+    </p>
+</section>
+
+<section class="guia" id="materiais">
+    <h3>5. Materiais de estudo</h3>
+
+    <p>
+        Na aba <strong>MATERIAIS</strong>, você publica links ou arquivos PDF, escolhendo o
+        assunto de cada um. A lista aparece agrupada por assunto, tanto para você quanto para
+        os estudantes da sala.
+    </p>
+
+    <p>
+        Link precisa começar com <code>http://</code> ou <code>https://</code>. PDF vai até
+        10 MB. Só quem é responsável pela sala adiciona, edita e remove — o estudante lê.
+    </p>
+</section>
+
+<section class="guia" id="aluno">
+    <h3>6. Sou estudante</h3>
+
+    <h4>Entrar numa sala</h4>
+
+    <p>
+        Peça o código ao professor e digite em <strong>Entrar em uma sala</strong>, na página
+        inicial. O pedido vai para o responsável, que aprova ou recusa. Depois de aprovado, a
+        sala aparece em "Salas em que você participa".
+    </p>
+
+    <h4>Responder uma atividade</h4>
+
+    <p>
+        Abra a sala, vá em <strong>ATIVIDADES</strong> e clique em <strong>Responder</strong>.
+        Marque uma alternativa em cada questão e envie.
+    </p>
+
+    <p class="atencao">
+        Cada atividade pode ser respondida <strong>uma vez só</strong>. Responda com calma.
+    </p>
+
+    <p>
+        Na hora você recebe a correção: quantas acertou, e questão por questão o que você
+        marcou, qual era a alternativa certa e a resolução do professor, quando ele escreveu
+        uma. Dá para voltar e reler essa correção quando quiser.
+    </p>
+
+    <h4>Seu nível</h4>
+
+    <p>
+        Quanto mais questões você responde, mais alto seu nível — Iniciante, Aprendiz,
+        Praticante, Avançado, Mestre e Lenda da Física. Ele conta todas as salas juntas e
+        aparece na página inicial e no seu perfil, com quanto falta para o próximo.
+    </p>
+</section>
+
+<section class="guia" id="acompanhar">
+    <h3>7. Acompanhar a turma</h3>
+
+    <p>
+        A aba <strong>ALUNOS</strong> mostra os pedidos de entrada pendentes e quem já
+        participa. Quando há pedido esperando, o número fica vermelho — na sala e também na
+        lista de salas da página inicial.
+    </p>
+
+    <p>
+        A aba <strong>RANKING</strong> ordena os estudantes por acertos, com o aproveitamento
+        de cada um.
+    </p>
+
+    <p>
+        O botão <strong>Relatório</strong>, no topo da sala, abre a visão completa: quantos já
+        responderam, quantos faltam, as cinco questões que mais derrubaram a turma, e o
+        desempenho por aluno, por atividade e por questão. É onde você vê o que precisa ser
+        revisado.
+    </p>
+</section>
+
+<section class="guia" id="admin">
+    <h3>8. Administrador</h3>
+
+    <p>
+        Quem é administrador vê <strong>Solicitações pendentes</strong> no menu, com o número
+        de pedidos esperando. O painel lista cada solicitante com nome, e-mail, motivo,
+        conteúdo que pretende ensinar e público-alvo.
+    </p>
+
+    <p>
+        Aprovar transforma a pessoa em tutor na hora. Recusar mantém como estudante, e ela
+        pode tentar de novo. Se duas pessoas analisarem o mesmo pedido ao mesmo tempo, a
+        segunda recebe um aviso em vez de sobrescrever a decisão.
+    </p>
+</section>
+
+<section class="guia" id="problemas">
+    <h3>Deu problema?</h3>
 
     <dl>
-        <dt>Todo cadastro começa como estudante</dt>
-        <dd>Para criar salas é preciso pedir permissão de tutor em "Quero ser tutor".</dd>
+        <dt>A página demora ou dá erro de conexão</dt>
+        <dd>É o banco, que fica num servidor remoto e às vezes oscila. Espere alguns segundos
+            e recarregue.</dd>
 
-        <dt>Quem aprova é o administrador</dt>
-        <dd>O pedido aparece no painel dele com motivo, conteúdo e público-alvo.</dd>
+        <dt>Cliquei em "Turma" e caí no pedido de tutoria</dt>
+        <dd>Sua permissão de tutor ainda não foi aprovada.</dd>
 
-        <dt>Entrar numa sala</dt>
-        <dd>O tutor passa o código de convite; o estudante digita na página inicial e aguarda
-            o tutor aprovar a entrada.</dd>
+        <dt>Não consigo criar sala com um nome</dt>
+        <dd>Você já tem outra sala com esse mesmo nome.</dd>
 
-        <dt>Atividades</dt>
-        <dd>O tutor monta questões no banco da sala e junta as escolhidas em uma atividade.
-            O estudante responde uma vez e vê a pontuação na hora.</dd>
+        <dt>Esqueci minha senha</dt>
+        <dd>Ainda não existe recuperação automática. Peça a um administrador.</dd>
     </dl>
 </section>
 {% endblock %}

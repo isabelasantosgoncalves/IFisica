@@ -115,6 +115,7 @@ para o histórico e para quem precisar montar o banco do zero — nesse caso, no
 | `008_resolucao_exercicio.sql` | `resolucao` na questão, mostrada ao aluno na correção | sim |
 | `009_imagem_exercicio.sql` | `imagem` na questão | sim |
 | `010_materiais.sql` | tabela `Material` (links e PDFs por assunto) | sim |
+| `011_arquivos_no_banco.sql` | tabela `Arquivo`: imagens e PDFs passam a viver no banco | sim |
 
 Como o banco é compartilhado com o grupo do módulo de alunos, qualquer migração nova precisa
 ser combinada antes de rodar. `conferencia.sql` confere as quatro primeiras.
@@ -187,7 +188,7 @@ solicitação em vez de num erro.
 | `/perfil` | dados pessoais, nível e salas do usuário |
 | `/configuracoes` | troca de senha e sessão |
 | `/sobre` | o que é o IFísica |
-| `/ajuda` | guia prático em PDF |
+| `/ajuda` | guia prático de uso, por tela |
 
 A página da sala é a mesma para tutor e estudante: o front esconde código de convite, pedidos
 de entrada, banco de questões e criação de atividades para quem não é o responsável.
@@ -271,9 +272,12 @@ O gabarito nunca é enviado ao estudante: a correção acontece no servidor, e a
 de questões é restrita a tutores. Depois de responder, o estudante vê a correção questão por
 questão — o que marcou, qual era a certa e a resolução escrita pelo professor.
 
-Questões aceitam imagem opcional (JPG, PNG, GIF ou WEBP, até 3 MB). O arquivo é validado pelo
-conteúdo, não pela extensão, salvo com nome aleatório em `static/uploads/exercicios`, e só o
-nome fica no banco.
+Questões aceitam imagem opcional (JPG, PNG, GIF ou WEBP, até 3 MB) e materiais aceitam PDF
+(até 10 MB). O arquivo é validado pelo conteúdo, não pela extensão, e **fica guardado no
+banco**, na tabela `Arquivo`, servido por `/api/arquivos/<id>`.
+
+Guardar em disco não funcionaria aqui: cada pessoa roda a aplicação no próprio computador e só
+o banco é compartilhado, então um arquivo salvo em disco existiria apenas para quem o enviou.
 
 Pendências ficam visíveis: a página inicial do administrador avisa quantos pedidos de tutoria
 aguardam análise, e cada sala do tutor mostra quantos pedidos de entrada tem.

@@ -1,7 +1,13 @@
 from flask import Blueprint, redirect, render_template, session, url_for
 
 from models import solicitacao as modelo_solicitacao
-from models.constantes import GENEROS, NIVEIS, PAPEL_ADMINISTRADOR
+from models.constantes import (
+    DIFICULDADES,
+    GENEROS,
+    MATERIAS,
+    NIVEIS,
+    PAPEL_ADMINISTRADOR
+)
 from routes.seguranca import (
     ensino_obrigatorio,
     login_obrigatorio,
@@ -71,7 +77,12 @@ def escolaridade():
 @pagina_bp.route("/turma/<int:id_turma>")
 @login_obrigatorio
 def pagTurma(id_turma):
-    return render_template("pagTurma.html", id_turma=id_turma)
+    return render_template(
+        "pagTurma.html",
+        id_turma=id_turma,
+        materias=MATERIAS,
+        dificuldades=DIFICULDADES
+    )
 
 
 @pagina_bp.route("/solicitar-tutor")

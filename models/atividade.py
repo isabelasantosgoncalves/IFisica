@@ -200,7 +200,7 @@ def listar_exercicios_para_responder(id_atividade):
         SELECT
             e.idExercicio, e.pergunta,
             e.alternativaA, e.alternativaB, e.alternativaC, e.alternativaD,
-            e.materia, e.dificuldade, e.imagem
+            e.materia, e.dificuldade, e.idImagem
         FROM AtividadeExercicio ae
         INNER JOIN Exercicio e ON e.idExercicio = ae.idExercicio
         WHERE ae.idAtividade = %s

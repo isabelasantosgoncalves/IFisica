@@ -1,123 +1,112 @@
-import os
-import secrets
+from flask import Blueprint, Response, jsonify, request, session
 
-from flask import Blueprint, current_app, jsonify, request
-
-from routes.seguranca import tutor_obrigatorio_api
+from models import arquivo as modelo_arquivo
+from routes.seguranca import login_obrigatorio_api, tutor_obrigatorio_api
 
 upload_bp = Blueprint("upload", __name__)
 
-PASTA_EXERCICIOS = os.path.join("static", "uploads", "exercicios")
-PASTA_MATERIAIS = os.path.join("static", "uploads", "materiais")
+TIPOS_IMAGEM = ("image/jpeg", "image/png", "image/gif", "image/webp")
 
-EXTENSOES = {
-    "image/jpeg": ".jpg",
-    "image/png": ".png",
-    "image/gif": ".gif",
-    "image/webp": ".webp"
-}
-
-TAMANHO_MAXIMO = 3 * 1024 * 1024
+TAMANHO_MAXIMO_IMAGEM = 3 * 1024 * 1024
 TAMANHO_MAXIMO_PDF = 10 * 1024 * 1024
 
-ASSINATURAS = (
-    (b"\xff\xd8\xff", ".jpg"),
-    (b"\x89PNG\r\n\x1a\n", ".png"),
-    (b"GIF87a", ".gif"),
-    (b"GIF89a", ".gif"),
+ASSINATURAS_IMAGEM = (
+    (b"\xff\xd8\xff", "image/jpeg"),
+    (b"\x89PNG\r\n\x1a\n", "image/png"),
+    (b"GIF87a", "image/gif"),
+    (b"GIF89a", "image/gif")
 )
 
 
-def extensao_confiavel(arquivo):
-    inicio = arquivo.read(16)
-    arquivo.seek(0)
+def tipo_real_da_imagem(conteudo):
+    """A extensão e o tipo que o navegador informa podem mentir; os primeiros
+    bytes do arquivo, não."""
+    for assinatura, tipo in ASSINATURAS_IMAGEM:
+        if conteudo.startswith(assinatura):
+            return tipo
 
-    for assinatura, extensao in ASSINATURAS:
-        if inicio.startswith(assinatura):
-            return extensao
-
-    if inicio[:4] == b"RIFF" and inicio[8:12] == b"WEBP":
-        return ".webp"
+    if conteudo[:4] == b"RIFF" and conteudo[8:12] == b"WEBP":
+        return "image/webp"
 
     return None
+
+
+def ler_enviado(campo):
+    arquivo = request.files.get(campo)
+
+    if not arquivo or not arquivo.filename:
+        return None, None
+
+    return arquivo.read(), arquivo.filename[:160]
 
 
 @upload_bp.route("/uploads/exercicios", methods=["POST"])
 @tutor_obrigatorio_api
 def enviar_imagem():
 
-    arquivo = request.files.get("imagem")
+    conteudo, nome = ler_enviado("imagem")
 
-    if not arquivo or not arquivo.filename:
+    if not conteudo:
         return jsonify({"erro": "Escolha uma imagem."}), 400
 
-    if arquivo.mimetype not in EXTENSOES:
+    if len(conteudo) > TAMANHO_MAXIMO_IMAGEM:
+        return jsonify({"erro": "A imagem precisa ter no máximo 3 MB."}), 400
+
+    tipo = tipo_real_da_imagem(conteudo)
+
+    if tipo not in TIPOS_IMAGEM:
         return jsonify({
-            "erro": "A imagem precisa ser JPG, PNG, GIF ou WEBP."
+            "erro": "Esse arquivo não parece ser uma imagem JPG, PNG, GIF ou WEBP."
         }), 400
 
-    arquivo.seek(0, os.SEEK_END)
-    tamanho = arquivo.tell()
-    arquivo.seek(0)
-
-    if tamanho > TAMANHO_MAXIMO:
-        return jsonify({
-            "erro": "A imagem precisa ter no máximo 3 MB."
-        }), 400
-
-    extensao = extensao_confiavel(arquivo)
-
-    if not extensao:
-        return jsonify({
-            "erro": "Esse arquivo não parece ser uma imagem."
-        }), 400
-
-    nome = secrets.token_hex(16) + extensao
-    destino = os.path.join(current_app.root_path, PASTA_EXERCICIOS)
-
-    os.makedirs(destino, exist_ok=True)
-    arquivo.save(os.path.join(destino, nome))
+    id_arquivo = modelo_arquivo.salvar(nome, tipo, conteudo, session["idUsuario"])
 
     return jsonify({
         "mensagem": "Imagem enviada!",
-        "imagem": nome,
-        "url": f"/static/uploads/exercicios/{nome}"
+        "idArquivo": id_arquivo,
+        "url": f"/api/arquivos/{id_arquivo}"
     }), 201
-
-
-def medir(arquivo):
-    arquivo.seek(0, os.SEEK_END)
-    tamanho = arquivo.tell()
-    arquivo.seek(0)
-    return tamanho
 
 
 @upload_bp.route("/uploads/materiais", methods=["POST"])
 @tutor_obrigatorio_api
 def enviar_pdf():
 
-    arquivo = request.files.get("arquivo")
+    conteudo, nome = ler_enviado("arquivo")
 
-    if not arquivo or not arquivo.filename:
+    if not conteudo:
         return jsonify({"erro": "Escolha um arquivo PDF."}), 400
 
-    if medir(arquivo) > TAMANHO_MAXIMO_PDF:
+    if len(conteudo) > TAMANHO_MAXIMO_PDF:
         return jsonify({"erro": "O PDF precisa ter no máximo 10 MB."}), 400
 
-    inicio = arquivo.read(5)
-    arquivo.seek(0)
-
-    if inicio != b"%PDF-":
+    if not conteudo.startswith(b"%PDF-"):
         return jsonify({"erro": "Esse arquivo não parece ser um PDF."}), 400
 
-    nome = secrets.token_hex(16) + ".pdf"
-    destino = os.path.join(current_app.root_path, PASTA_MATERIAIS)
-
-    os.makedirs(destino, exist_ok=True)
-    arquivo.save(os.path.join(destino, nome))
+    id_arquivo = modelo_arquivo.salvar(
+        nome, "application/pdf", conteudo, session["idUsuario"]
+    )
 
     return jsonify({
         "mensagem": "PDF enviado!",
-        "arquivo": nome,
-        "url": f"/static/uploads/materiais/{nome}"
+        "idArquivo": id_arquivo,
+        "url": f"/api/arquivos/{id_arquivo}"
     }), 201
+
+
+@upload_bp.route("/arquivos/<int:id_arquivo>", methods=["GET"])
+@login_obrigatorio_api
+def baixar(id_arquivo):
+
+    arquivo = modelo_arquivo.buscar_conteudo(id_arquivo)
+
+    if not arquivo:
+        return jsonify({"erro": "Arquivo não encontrado."}), 404
+
+    resposta = Response(arquivo["conteudo"], mimetype=arquivo["tipo"])
+    resposta.headers["Content-Disposition"] = (
+        f'inline; filename="{arquivo["nome"]}"'
+    )
+    resposta.headers["Cache-Control"] = "private, max-age=86400"
+
+    return resposta

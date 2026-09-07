@@ -12,12 +12,12 @@ const listaCorrecao = document.getElementById("listaCorrecao");
 
 const LETRAS = ["A", "B", "C", "D"];
 
-function montarImagem(nomeArquivo) {
-    if (!nomeArquivo) return null;
+function montarImagem(idArquivo) {
+    if (!idArquivo) return null;
 
     const imagem = document.createElement("img");
     imagem.className = "imagem-questao";
-    imagem.src = `/static/uploads/exercicios/${nomeArquivo}`;
+    imagem.src = `/api/arquivos/${idArquivo}`;
     imagem.alt = "Imagem da questão";
     imagem.loading = "lazy";
     return imagem;
@@ -37,7 +37,7 @@ function montarCorrecao(questao, indice) {
 
     item.append(marca, enunciado);
 
-    const imagem = montarImagem(questao.imagem);
+    const imagem = montarImagem(questao.idImagem);
     if (imagem) item.append(imagem);
 
     for (const letra of LETRAS) {
@@ -107,7 +107,7 @@ function montarQuestao(questao, indice) {
 
     item.append(enunciado, tags);
 
-    const imagem = montarImagem(questao.imagem);
+    const imagem = montarImagem(questao.idImagem);
     if (imagem) item.append(imagem);
 
     const alternativas = [

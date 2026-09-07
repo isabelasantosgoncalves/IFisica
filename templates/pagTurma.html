@@ -68,21 +68,9 @@
             <div class="filtros-exercicios">
                 <select id="filtroMateria">
                     <option value="">Todas as matérias</option>
-                    <option>Cinemática</option>
-                    <option>Dinâmica</option>
-                    <option>Gravitação</option>
-                    <option>Estática</option>
-                    <option>Hidrostática</option>
-                    <option>Hidrodinâmica</option>
-                    <option>Termologia</option>
-                    <option>Ondulatória</option>
-                    <option>Movimento Harmônico Simples</option>
-                    <option>Óptica</option>
-                    <option>Eletrostática</option>
-                    <option>Eletrodinâmica</option>
-                    <option>Eletromagnetismo</option>
-                    <option>Física Moderna</option>
-                    <option>Análise Dimensional</option>
+                    {% for materia in materias %}
+                    <option>{{ materia }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
@@ -99,29 +87,17 @@
                 <label for="materiaQuestao">Matéria</label>
                 <select id="materiaQuestao" required>
                     <option value="">Selecione…</option>
-                    <option>Cinemática</option>
-                    <option>Dinâmica</option>
-                    <option>Gravitação</option>
-                    <option>Estática</option>
-                    <option>Hidrostática</option>
-                    <option>Hidrodinâmica</option>
-                    <option>Termologia</option>
-                    <option>Ondulatória</option>
-                    <option>Movimento Harmônico Simples</option>
-                    <option>Óptica</option>
-                    <option>Eletrostática</option>
-                    <option>Eletrodinâmica</option>
-                    <option>Eletromagnetismo</option>
-                    <option>Física Moderna</option>
-                    <option>Análise Dimensional</option>
+                    {% for materia in materias %}
+                    <option>{{ materia }}</option>
+                    {% endfor %}
                 </select>
 
                 <label for="dificuldadeQuestao">Dificuldade</label>
                 <select id="dificuldadeQuestao" required>
                     <option value="">Selecione…</option>
-                    <option>Fácil</option>
-                    <option>Médio</option>
-                    <option>Difícil</option>
+                    {% for dificuldade in dificuldades %}
+                    <option>{{ dificuldade }}</option>
+                    {% endfor %}
                 </select>
 
                 <div class="linha-alternativa">
@@ -201,8 +177,12 @@
 
             <form id="formMaterial" novalidate>
                 <label for="assuntoMaterial">Assunto</label>
-                <input id="assuntoMaterial" type="text" maxlength="100"
-                       placeholder="Ex.: Cinemática" required>
+                <select id="assuntoMaterial" required>
+                    <option value="">Selecione…</option>
+                    {% for materia in materias %}
+                    <option>{{ materia }}</option>
+                    {% endfor %}
+                </select>
 
                 <label for="tituloMaterial">Título</label>
                 <input id="tituloMaterial" type="text" maxlength="120"

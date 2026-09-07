@@ -26,7 +26,11 @@ def ler_campos(dados):
     descricao = texto_ou_nulo(dados.get("descricao"))
     tipo = (texto_ou_nulo(dados.get("tipo")) or "").lower()
     url = texto_ou_nulo(dados.get("url"))
-    arquivo = texto_ou_nulo(dados.get("arquivo"))
+    try:
+        id_arquivo = dados.get("idArquivo")
+        id_arquivo = int(id_arquivo) if id_arquivo else None
+    except (TypeError, ValueError):
+        id_arquivo = None
 
     if not assunto or not titulo:
         return None, "Informe o assunto e o título do material."
@@ -44,20 +48,20 @@ def ler_campos(dados):
         if len(url) > LIMITE_URL:
             return None, "O link é longo demais."
 
-        arquivo = None
+        id_arquivo = None
 
     else:
-        if not arquivo:
+        if not id_arquivo:
             return None, "Envie o arquivo PDF."
 
         url = None
 
-    return (assunto, titulo, descricao, tipo, url, arquivo), None
+    return (assunto, titulo, descricao, tipo, url, id_arquivo), None
 
 
 def apresentar(material):
-    if material["tipo"] == modelo_material.TIPO_PDF and material["arquivo"]:
-        material["url"] = f"/static/uploads/materiais/{material['arquivo']}"
+    if material["tipo"] == modelo_material.TIPO_PDF and material["idArquivo"]:
+        material["url"] = f"/api/arquivos/{material['idArquivo']}"
 
     return formatar_datas(material, "dataCriacao")
 

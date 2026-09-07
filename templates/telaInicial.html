@@ -7,8 +7,10 @@
 {% endblock %}
 
 {% block conteudo %}
-<img src="{{ url_for('static', filename='images/pinguim-ifisica.png') }}"
-     alt="IFísica" width="70" class="img-canto">
+<a href="{{ url_for('pagina.telaInicial') }}" class="marca-link" title="Página inicial">
+    <img src="{{ url_for('static', filename='images/pinguim-ifisica.png') }}"
+         alt="IFísica" width="70" class="img-canto">
+</a>
 
 <header>
     <img src="{{ url_for('static', filename='images/pinguim-ifisica.png') }}"

@@ -3,7 +3,7 @@ from database.db import obter_cursor
 COLUNAS_QUESTAO = """
     e.idExercicio, e.pergunta,
     e.alternativaA, e.alternativaB, e.alternativaC, e.alternativaD,
-    e.alternativaCerta, e.materia, e.dificuldade, e.resolucao, e.imagem
+    e.alternativaCerta, e.materia, e.dificuldade, e.resolucao, e.idImagem
 """
 
 

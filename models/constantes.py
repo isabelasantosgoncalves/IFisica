@@ -52,3 +52,23 @@ NIVEIS_ALUNO = (
     (100, "Mestre"),
     (200, "Lenda da Física")
 )
+
+MATERIAS = (
+    "Cinemática",
+    "Dinâmica",
+    "Gravitação",
+    "Estática",
+    "Hidrostática",
+    "Hidrodinâmica",
+    "Termologia",
+    "Ondulatória",
+    "Movimento Harmônico Simples",
+    "Óptica",
+    "Eletrostática",
+    "Eletrodinâmica",
+    "Eletromagnetismo",
+    "Física Moderna",
+    "Análise Dimensional"
+)
+
+DIFICULDADES = ("Fácil", "Médio", "Difícil")

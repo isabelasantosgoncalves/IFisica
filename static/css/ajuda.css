@@ -3,6 +3,7 @@ body {
     color: rgb(46, 43, 43);
     margin: 0;
     padding: 24px;
+    background-color: #f7f8f9;
 }
 
 .topo-ajuda {
@@ -13,20 +14,11 @@ body {
     border-bottom: 2px solid #3fa0d1;
 }
 
-.topo-ajuda h2 {
-    margin: 0;
-    font-size: 1.4rem;
-}
+.topo-ajuda h2 { margin: 0; font-size: 1.4rem; }
 
-.topo-ajuda p {
-    margin: 4px 0 0;
-    color: #6b6b6b;
-    font-size: 0.9rem;
-}
+.topo-ajuda p { margin: 4px 0 0; color: #6b6b6b; font-size: 0.9rem; }
 
-.topo-ajuda a {
-    margin-left: auto;
-}
+.topo-ajuda a { margin-left: auto; }
 
 .topo-ajuda button {
     padding: 10px 18px;
@@ -38,57 +30,77 @@ body {
     cursor: pointer;
 }
 
-.acoes {
+.indice {
     display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: 20px 0;
     flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0;
+    max-width: 760px;
 }
 
-.botao-download {
-    padding: 10px 20px;
-    background-color: #3fa0d1;
-    color: white;
-    font-weight: bold;
-    border-radius: 6px;
+.indice a {
+    padding: 6px 13px;
+    background-color: #e4f0f7;
+    color: #2b7fae;
+    border-radius: 999px;
     text-decoration: none;
+    font-size: 0.85rem;
 }
 
-.link-simples {
+.indice a:hover { background-color: #cfe5f1; }
+
+.guia {
+    background-color: white;
+    border: 1px solid #d6dde2;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    max-width: 760px;
+    scroll-margin-top: 16px;
+}
+
+.guia h3 {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
     color: #2b7fae;
 }
 
-.visor {
-    width: 100%;
-    height: 70vh;
-    min-height: 420px;
-    border: 1px solid #d6dde2;
-    border-radius: 8px;
-    background-color: white;
+.guia h4 {
+    margin: 20px 0 6px;
+    font-size: 0.95rem;
 }
 
-.sem-visor {
-    padding: 24px;
+.guia p, .guia li, .guia dd {
+    line-height: 1.65;
 }
 
-.resumo {
-    margin-top: 28px;
-    max-width: 640px;
+.guia p { margin: 0 0 12px; }
+
+.guia ul, .guia ol { padding-left: 22px; margin: 0 0 12px; }
+
+.guia li { margin-bottom: 6px; }
+
+.guia code {
+    background-color: #f2f7fa;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.9em;
 }
 
-.resumo h3 {
-    font-size: 1.1rem;
-    margin-bottom: 12px;
+.atencao {
+    background-color: #fbeedd;
+    border-left: 4px solid #c87623;
+    border-radius: 0 6px 6px 0;
+    padding: 11px 14px;
+    margin: 0 0 12px;
 }
 
-.resumo dt {
+.guia dt {
     font-weight: bold;
     margin-top: 14px;
 }
 
-.resumo dd {
+.guia dd {
     margin: 4px 0 0;
     color: #4a4a4a;
-    line-height: 1.5;
 }

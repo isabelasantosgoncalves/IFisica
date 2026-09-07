@@ -16,7 +16,11 @@ def validar_payload(dados):
     dificuldade = texto_ou_nulo(dados.get("dificuldade"))
     alternativa_certa = texto_ou_nulo(dados.get("alternativaCerta"))
     resolucao = texto_ou_nulo(dados.get("resolucao"))
-    imagem = texto_ou_nulo(dados.get("imagem"))
+    try:
+        id_imagem = dados.get("idImagem")
+        id_imagem = int(id_imagem) if id_imagem else None
+    except (TypeError, ValueError):
+        id_imagem = None
 
     alternativas = {
         letra: texto_ou_nulo(dados.get(f"alternativa{letra}"))
@@ -36,7 +40,7 @@ def validar_payload(dados):
         erros.append("Preencha as quatro alternativas.")
 
     return (pergunta, alternativas, alternativa_certa, materia, dificuldade,
-            resolucao, imagem), erros
+            resolucao, id_imagem), erros
 
 
 @exercicio_bp.route("/exercicios", methods=["POST"])

@@ -3,18 +3,18 @@ from database.db import obter_cursor
 COLUNAS = (
     "idExercicio", "pergunta",
     "alternativaA", "alternativaB", "alternativaC", "alternativaD",
-    "alternativaCerta", "materia", "dificuldade", "resolucao", "imagem"
+    "alternativaCerta", "materia", "dificuldade", "resolucao", "idImagem"
 )
 
 LISTA_COLUNAS = ", ".join(COLUNAS)
 
 
 def criar(pergunta, alternativas, alternativa_certa, materia, dificuldade,
-          resolucao=None, imagem=None):
+          resolucao=None, id_imagem=None):
     sql = """
         INSERT INTO Exercicio
         (pergunta, alternativaA, alternativaB, alternativaC, alternativaD,
-         alternativaCerta, materia, dificuldade, resolucao, imagem)
+         alternativaCerta, materia, dificuldade, resolucao, idImagem)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     with obter_cursor(commit=True) as cursor:
@@ -22,7 +22,7 @@ def criar(pergunta, alternativas, alternativa_certa, materia, dificuldade,
             pergunta,
             alternativas.get("A"), alternativas.get("B"),
             alternativas.get("C"), alternativas.get("D"),
-            alternativa_certa, materia, dificuldade, resolucao, imagem
+            alternativa_certa, materia, dificuldade, resolucao, id_imagem
         ))
         return cursor.lastrowid
 
@@ -56,12 +56,12 @@ def buscar(id_exercicio):
 
 
 def atualizar(id_exercicio, pergunta, alternativas, alternativa_certa, materia,
-              dificuldade, resolucao=None, imagem=None):
+              dificuldade, resolucao=None, id_imagem=None):
     sql = """
         UPDATE Exercicio
         SET pergunta = %s, alternativaA = %s, alternativaB = %s,
             alternativaC = %s, alternativaD = %s, alternativaCerta = %s,
-            materia = %s, dificuldade = %s, resolucao = %s, imagem = %s
+            materia = %s, dificuldade = %s, resolucao = %s, idImagem = %s
         WHERE idExercicio = %s
     """
     with obter_cursor(commit=True) as cursor:
@@ -69,7 +69,7 @@ def atualizar(id_exercicio, pergunta, alternativas, alternativa_certa, materia,
             pergunta,
             alternativas.get("A"), alternativas.get("B"),
             alternativas.get("C"), alternativas.get("D"),
-            alternativa_certa, materia, dificuldade, resolucao, imagem,
+            alternativa_certa, materia, dificuldade, resolucao, id_imagem,
             id_exercicio
         ))
         return cursor.rowcount > 0

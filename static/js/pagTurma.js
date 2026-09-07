@@ -332,20 +332,20 @@ const previaImagem = document.getElementById("previaImagem");
 const imagemAtual = document.getElementById("imagemAtual");
 const botaoRemoverImagem = document.getElementById("botaoRemoverImagem");
 
-let imagemDaQuestao = null;
+let idImagemDaQuestao = null;
 
-function mostrarPrevia(nomeArquivo) {
-    imagemDaQuestao = nomeArquivo || null;
+function mostrarPrevia(idArquivo) {
+    idImagemDaQuestao = idArquivo || null;
 
     if (!previaImagem) return;
 
-    if (!imagemDaQuestao) {
+    if (!idImagemDaQuestao) {
         previaImagem.hidden = true;
         imagemAtual.removeAttribute("src");
         return;
     }
 
-    imagemAtual.src = `/static/uploads/exercicios/${imagemDaQuestao}`;
+    imagemAtual.src = `/api/arquivos/${idImagemDaQuestao}`;
     previaImagem.hidden = false;
 }
 
@@ -357,7 +357,7 @@ if (botaoRemoverImagem) {
 }
 
 async function enviarImagemSelecionada() {
-    if (!campoImagem || !campoImagem.files.length) return imagemDaQuestao;
+    if (!campoImagem || !campoImagem.files.length) return idImagemDaQuestao;
 
     const corpo = new FormData();
     corpo.append("imagem", campoImagem.files[0]);
@@ -374,8 +374,8 @@ async function enviarImagemSelecionada() {
     }
 
     campoImagem.value = "";
-    mostrarPrevia(dados.imagem);
-    return dados.imagem;
+    mostrarPrevia(dados.idArquivo);
+    return dados.idArquivo;
 }
 const botaoSalvarQuestao = document.getElementById("botaoSalvarQuestao");
 const botaoCancelarEdicaoQuestao = document.getElementById("botaoCancelarEdicaoQuestao");
@@ -487,7 +487,7 @@ function iniciarEdicaoQuestao(exercicio) {
 
     const campoResolucao = document.getElementById("resolucaoQuestao");
     if (campoResolucao) campoResolucao.value = exercicio.resolucao || "";
-    mostrarPrevia(exercicio.imagem);
+    mostrarPrevia(exercicio.idImagem);
 
     const radioCerta = formQuestao.querySelector(
         `input[name="respostaCerta"][value="${exercicio.alternativaCerta}"]`
@@ -552,13 +552,13 @@ formQuestao.addEventListener("submit", async (evento) => {
         alternativaD: document.getElementById("alternativaD").value.trim(),
         alternativaCerta: respostaCerta.value,
         resolucao: campoResolucao ? campoResolucao.value.trim() : "",
-        imagem: imagemDaQuestao
+        idImagem: idImagemDaQuestao
     };
 
     bloquear(formQuestao, true);
 
     try {
-        corpo.imagem = await enviarImagemSelecionada();
+        corpo.idImagem = await enviarImagemSelecionada();
         if (exercicioEditando) {
             await enviarJson(`/api/exercicios/${exercicioEditando}`, corpo, "PUT");
             mostrarAviso("Questão atualizada!", true);

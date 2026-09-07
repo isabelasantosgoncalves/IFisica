@@ -19,3 +19,22 @@ input[type="submit"]:disabled {
     opacity: 0.6;
     cursor: progress;
 }
+
+.marca-link {
+    display: inline-block;
+    line-height: 0;
+    border-radius: 10px;
+}
+
+.marca-link:focus-visible {
+    outline: 2px solid #3fa0d1;
+    outline-offset: 3px;
+}
+
+.marca-link img {
+    transition: transform 0.15s ease;
+}
+
+.marca-link:hover img {
+    transform: scale(1.06);
+}

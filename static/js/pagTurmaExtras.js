@@ -13,7 +13,7 @@ const botaoCancelarEdicaoMaterial = document.getElementById("botaoCancelarEdicao
 const listaRanking = document.getElementById("listaRanking");
 
 let materialEditando = null;
-let arquivoDoMaterial = null;
+let idArquivoDoMaterial = null;
 
 function tipoMaterialEscolhido() {
     const marcado = formMaterial.querySelector('input[name="tipoMaterial"]:checked');
@@ -132,7 +132,7 @@ async function carregarMateriais() {
 
 function iniciarEdicaoMaterial(material) {
     materialEditando = material.idMaterial;
-    arquivoDoMaterial = material.arquivo;
+    idArquivoDoMaterial = material.idArquivo;
 
     document.getElementById("assuntoMaterial").value = material.assunto;
     document.getElementById("tituloMaterial").value = material.titulo;
@@ -158,7 +158,7 @@ function iniciarEdicaoMaterial(material) {
 
 function cancelarEdicaoMaterial() {
     materialEditando = null;
-    arquivoDoMaterial = null;
+    idArquivoDoMaterial = null;
     formMaterial.reset();
     alternarCamposMaterial();
     pdfEnviado.hidden = true;
@@ -190,7 +190,7 @@ async function excluirMaterial(idMaterial) {
 }
 
 async function enviarPdfSelecionado() {
-    if (!arquivoMaterial.files.length) return arquivoDoMaterial;
+    if (!arquivoMaterial.files.length) return idArquivoDoMaterial;
 
     const corpo = new FormData();
     corpo.append("arquivo", arquivoMaterial.files[0]);
@@ -207,7 +207,7 @@ async function enviarPdfSelecionado() {
     }
 
     arquivoMaterial.value = "";
-    return dados.arquivo;
+    return dados.idArquivo;
 }
 
 formMaterial.addEventListener("submit", async (evento) => {
@@ -227,7 +227,7 @@ formMaterial.addEventListener("submit", async (evento) => {
     bloquear(formMaterial, true);
 
     try {
-        if (tipo === "pdf") corpo.arquivo = await enviarPdfSelecionado();
+        if (tipo === "pdf") corpo.idArquivo = await enviarPdfSelecionado();
 
         if (materialEditando) {
             await enviarJson(

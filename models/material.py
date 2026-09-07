@@ -2,7 +2,7 @@ from database.db import obter_cursor
 
 COLUNAS = """
     idMaterial, idTurma, assunto, titulo, descricao,
-    tipo, url, arquivo, dataCriacao
+    tipo, url, idArquivo, dataCriacao
 """
 
 TIPO_LINK = "link"
@@ -11,15 +11,15 @@ TIPO_PDF = "pdf"
 TIPOS = (TIPO_LINK, TIPO_PDF)
 
 
-def criar(id_turma, assunto, titulo, descricao, tipo, url, arquivo):
+def criar(id_turma, assunto, titulo, descricao, tipo, url, id_arquivo):
     sql = """
         INSERT INTO Material
-        (idTurma, assunto, titulo, descricao, tipo, url, arquivo)
+        (idTurma, assunto, titulo, descricao, tipo, url, idArquivo)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
 
     with obter_cursor(commit=True) as cursor:
-        cursor.execute(sql, (id_turma, assunto, titulo, descricao, tipo, url, arquivo))
+        cursor.execute(sql, (id_turma, assunto, titulo, descricao, tipo, url, id_arquivo))
         return cursor.lastrowid
 
 
@@ -48,17 +48,17 @@ def buscar(id_material, id_turma):
         return cursor.fetchone()
 
 
-def atualizar(id_material, id_turma, assunto, titulo, descricao, tipo, url, arquivo):
+def atualizar(id_material, id_turma, assunto, titulo, descricao, tipo, url, id_arquivo):
     sql = """
         UPDATE Material
         SET assunto = %s, titulo = %s, descricao = %s,
-            tipo = %s, url = %s, arquivo = %s
+            tipo = %s, url = %s, idArquivo = %s
         WHERE idMaterial = %s AND idTurma = %s
     """
 
     with obter_cursor(commit=True) as cursor:
         cursor.execute(sql, (
-            assunto, titulo, descricao, tipo, url, arquivo, id_material, id_turma
+            assunto, titulo, descricao, tipo, url, id_arquivo, id_material, id_turma
         ))
         return cursor.rowcount
 
