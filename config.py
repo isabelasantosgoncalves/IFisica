@@ -21,6 +21,7 @@ class Config:
     DB_PASSWORD = os.getenv("DB_PASSWORD")
     DB_NAME = os.getenv("DB_NAME")
     DB_POOL_SIZE = int(os.getenv("DB_POOL_SIZE", 5))
+    DB_TIMEOUT = int(os.getenv("DB_TIMEOUT", 6))
 
     MAX_CONTENT_LENGTH = 4 * 1024 * 1024
 

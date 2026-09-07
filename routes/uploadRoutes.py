@@ -7,7 +7,8 @@ from routes.seguranca import tutor_obrigatorio_api
 
 upload_bp = Blueprint("upload", __name__)
 
-PASTA = os.path.join("static", "uploads", "exercicios")
+PASTA_EXERCICIOS = os.path.join("static", "uploads", "exercicios")
+PASTA_MATERIAIS = os.path.join("static", "uploads", "materiais")
 
 EXTENSOES = {
     "image/jpeg": ".jpg",
@@ -17,6 +18,7 @@ EXTENSOES = {
 }
 
 TAMANHO_MAXIMO = 3 * 1024 * 1024
+TAMANHO_MAXIMO_PDF = 10 * 1024 * 1024
 
 ASSINATURAS = (
     (b"\xff\xd8\xff", ".jpg"),
@@ -71,7 +73,7 @@ def enviar_imagem():
         }), 400
 
     nome = secrets.token_hex(16) + extensao
-    destino = os.path.join(current_app.root_path, PASTA)
+    destino = os.path.join(current_app.root_path, PASTA_EXERCICIOS)
 
     os.makedirs(destino, exist_ok=True)
     arquivo.save(os.path.join(destino, nome))
@@ -80,4 +82,42 @@ def enviar_imagem():
         "mensagem": "Imagem enviada!",
         "imagem": nome,
         "url": f"/static/uploads/exercicios/{nome}"
+    }), 201
+
+
+def medir(arquivo):
+    arquivo.seek(0, os.SEEK_END)
+    tamanho = arquivo.tell()
+    arquivo.seek(0)
+    return tamanho
+
+
+@upload_bp.route("/uploads/materiais", methods=["POST"])
+@tutor_obrigatorio_api
+def enviar_pdf():
+
+    arquivo = request.files.get("arquivo")
+
+    if not arquivo or not arquivo.filename:
+        return jsonify({"erro": "Escolha um arquivo PDF."}), 400
+
+    if medir(arquivo) > TAMANHO_MAXIMO_PDF:
+        return jsonify({"erro": "O PDF precisa ter no máximo 10 MB."}), 400
+
+    inicio = arquivo.read(5)
+    arquivo.seek(0)
+
+    if inicio != b"%PDF-":
+        return jsonify({"erro": "Esse arquivo não parece ser um PDF."}), 400
+
+    nome = secrets.token_hex(16) + ".pdf"
+    destino = os.path.join(current_app.root_path, PASTA_MATERIAIS)
+
+    os.makedirs(destino, exist_ok=True)
+    arquivo.save(os.path.join(destino, nome))
+
+    return jsonify({
+        "mensagem": "PDF enviado!",
+        "arquivo": nome,
+        "url": f"/static/uploads/materiais/{nome}"
     }), 201

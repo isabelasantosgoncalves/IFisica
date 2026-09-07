@@ -21,7 +21,9 @@ IFisica/
 │   ├── turma.py              sala, código de convite e participantes
 │   ├── exercicio.py          banco de questões
 │   ├── atividade.py          atividade e suas questões
-│   └── resposta_atividade.py respostas do estudante e pontuação
+│   ├── resposta_atividade.py respostas do estudante e pontuação
+│   ├── material.py           materiais de estudo
+│   └── desempenho.py         ranking e faixas de nível
 ├── routes/
 │   ├── seguranca.py          sessão e permissão por papel
 │   ├── utilitarios.py        normalização de entrada e datas
@@ -33,7 +35,9 @@ IFisica/
 │   ├── exercicioRoutes.py    banco de questões
 │   ├── atividadeRoutes.py    atividades da sala
 │   ├── respostaRoutes.py     estudante respondendo atividade
-│   └── uploadRoutes.py       envio de imagem para a questão
+│   ├── materialRoutes.py     materiais de estudo da sala
+│   ├── desempenhoRoutes.py   ranking da sala e nível do estudante
+│   └── uploadRoutes.py       envio de imagem e PDF
 ├── templates/                base.html e as telas que a estendem
 └── static/
     ├── css/
@@ -108,6 +112,7 @@ para o histórico e para quem precisar montar o banco do zero — nesse caso, no
 | `007_resposta_atividade.sql` | tabelas `RealizacaoAtividade` e `RespostaAtividade` | sim |
 | `008_resolucao_exercicio.sql` | `resolucao` na questão, mostrada ao aluno na correção | sim |
 | `009_imagem_exercicio.sql` | `imagem` na questão | sim |
+| `010_materiais.sql` | tabela `Material` (links e PDFs por assunto) | sim |
 
 Como o banco é compartilhado com o grupo do módulo de alunos, qualquer migração nova precisa
 ser combinada antes de rodar. `conferencia.sql` confere as quatro primeiras.
@@ -206,6 +211,11 @@ todas exigem sessão ativa.
 | `PUT` | `/api/solicitacoes-entrada/<id>` | aprova ou recusa a entrada (responsável) |
 | `GET` `/` `POST` | `/api/exercicios` | banco de questões (só tutor) |
 | `POST` | `/api/uploads/exercicios` | envia a imagem de uma questão (só tutor) |
+| `POST` | `/api/uploads/materiais` | envia um PDF de material (só tutor) |
+| `GET` | `/api/turmas/<id>/materiais` | materiais da sala, agrupados por assunto |
+| `POST` `/` `PUT` `/` `DELETE` | `/api/turmas/<id>/materiais[/<id>]` | gerencia materiais (responsável) |
+| `GET` | `/api/turmas/<id>/ranking` | ranking da sala por acertos |
+| `GET` | `/api/meu-progresso` | questões respondidas, acertos e nível do usuário |
 | `PUT` `/` `DELETE` | `/api/exercicios/<id>` | edita ou remove uma questão |
 | `GET` `/` `POST` | `/api/turmas/<id>/atividades` | atividades da sala |
 | `GET` `/` `PUT` `/` `DELETE` | `/api/turmas/<id>/atividades/<id>` | uma atividade |
@@ -258,18 +268,40 @@ nome fica no banco.
 Pendências ficam visíveis: a página inicial do administrador avisa quantos pedidos de tutoria
 aguardam análise, e cada sala do tutor mostra quantos pedidos de entrada tem.
 
+A sala tem quatro abas: alunos, atividades, materiais e ranking. Materiais são links ou PDFs
+agrupados por assunto, que o responsável adiciona, edita e remove.
+
+## Gamificação
+
+O **ranking da sala** é calculado na hora, a partir das atividades respondidas: soma dos acertos,
+com empate desfeito por quem respondeu menos questões. Não há tabela de ranking a sincronizar.
+
+O **nível do estudante** é geral, não por sala, e vem da quantidade de questões respondidas.
+As faixas estão em `NIVEIS_ALUNO`, em `models/constantes.py`:
+
+| Questões respondidas | Nível |
+| --- | --- |
+| 0 | Iniciante |
+| 10 | Aprendiz |
+| 25 | Praticante |
+| 50 | Avançado |
+| 100 | Mestre |
+| 200 | Lenda da Física |
+
+Mudar as faixas é editar essa tupla; nada no banco precisa mudar.
+
 ## Integração com o módulo de alunos
 
 O outro grupo desenvolveu em **Java / Spring Boot**, com um modelo de dados próprio
 (`Aluno` e `Professor` separados, nomes em `snake_case`, tabela `Niveis`). Esse modelo é
-incompatível com o daqui e **não deve ser aplicado ao banco**: o script deles cria `Turma` e
-`Atividade`, que já existem com outra estrutura.
+incompatível com o daqui e o script deles **não deve ser aplicado ao banco**: ele cria `Turma`
+e `Atividade`, que já existem com outra estrutura.
 
-A decisão foi aproveitar o **HTML e CSS** das telas deles e descartar o backend Java, já que
-esta aplicação cobre o que aquele fazia e ainda tem papéis, aprovação de tutoria, código de
-convite e correção automática.
+O material deles ficou arquivado fora do projeto, apenas como registro. Esta aplicação já cobre
+o que aquele backend fazia, e ainda tem papéis, aprovação de tutoria, código de convite e
+correção automática.
 
-O que já está preparado para conviver com outro grupo no mesmo banco:
+O banco continua compartilhado, então valem os cuidados:
 
 - `database/schema.sql` é **somente aditivo** — sem `DROP` nem `TRUNCATE`
 - Nenhuma consulta usa `SELECT *`, então colunas novas não alteram as respostas desta API
@@ -278,12 +310,9 @@ O que já está preparado para conviver com outro grupo no mesmo banco:
 
 ## Próximos passos
 
-- Portar as telas do outro grupo que não têm equivalente aqui: perfil, turmas disponíveis,
-  relatório e a visão de turma do estudante
-- Materiais de aula: os templates existem, mas ainda não têm rota nem tabela
 - Relatórios do tutor: desempenho por aluno e por questão
-- Ranking, usando as tabelas `Ranking` e `RealizarLista` que já existem
 - Telas `sobre`, `configuracoes` e `conta` ainda são o cartaz de "em manutenção"
+- Perfil do usuário
 
 ## Scripts de apoio
 
@@ -294,16 +323,12 @@ Em `database/migracoes/`, todos para abrir no Workbench:
 
 ## Pendências de modelagem
 
-Pontos a resolver com o grupo do banco:
-
-- `Turma.nivel` e `Turma.tipo` guardam **a mesma informação**: o nível de escolaridade da
-  sala, um como código (1 a 5) e outro como texto. Enquanto as duas colunas existirem, o
-  código preenche `tipo` a partir de `nivel` (`rotulo_do_nivel` em `models/turma.py`), então
-  elas nunca ficam contraditórias. O certo, quando der, é apagar uma das duas — provavelmente
-  `tipo`, já que `nivel` é o que as consultas usam.
+- `Turma.nivel` (código 1 a 5) e `Turma.tipo` (o mesmo em texto) guardam a escolaridade da sala.
+  São redundantes, mas o código mantém as duas em sincronia sozinho: `rotulo_do_nivel`, em
+  `models/turma.py`, deriva o texto do código ao criar e ao editar. Decisão da equipe: deixar
+  como está.
 - Os valores de `Solicitacao.status` foram assumidos como `0` pendente, `1` aprovada,
-  `2` recusada. Confirmar.
+  `2` recusada.
 - `Turma.idSolicitacao` é `NOT NULL`, então só quem é tutor aprovado consegue criar sala.
-  É coerente com o fluxo, mas amarra as duas coisas de forma rígida.
-- Acesso ao banco: todo mundo entra como `root`, e a porta 3306 aceita conexão de qualquer
-  lugar da internet. O conserto é uma conta por pessoa com permissão só no `IFisica`.
+- O banco é acessado como `root` num servidor aberto à internet. Decisão da equipe: manter,
+  já que o projeto não vai ao ar e é trabalho de escola.

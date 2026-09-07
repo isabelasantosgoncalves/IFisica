@@ -41,3 +41,12 @@ GENEROS = (
 CODIGOS_GENERO = {codigo for codigo, _ in GENEROS}
 
 GENERO_AUTODECLARACAO = "autodeclaracao"
+
+NIVEIS_ALUNO = (
+    (0, "Iniciante"),
+    (10, "Aprendiz"),
+    (25, "Praticante"),
+    (50, "Avançado"),
+    (100, "Mestre"),
+    (200, "Lenda da Física")
+)

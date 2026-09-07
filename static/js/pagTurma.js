@@ -86,6 +86,11 @@ document.querySelectorAll(".aba").forEach((botao) => {
         const aba = botao.dataset.aba;
         document.getElementById("painelAlunos").hidden = aba !== "alunos";
         document.getElementById("painelAtividades").hidden = aba !== "atividades";
+        document.getElementById("painelMateriais").hidden = aba !== "materiais";
+        document.getElementById("painelRanking").hidden = aba !== "ranking";
+
+        if (aba === "materiais") carregarMateriais();
+        if (aba === "ranking") carregarRanking();
     });
 });
 

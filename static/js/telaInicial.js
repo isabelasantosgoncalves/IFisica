@@ -65,6 +65,61 @@ async function carregarTurmas() {
 
 carregarTurmas();
 
+// ---------- Meu nivel ----------
+
+async function carregarProgresso() {
+    const secao = document.getElementById("meuProgresso");
+
+    if (!secao) return;
+
+    try {
+        const resposta = await fetch("/api/meu-progresso");
+
+        if (!resposta.ok) return;
+
+        const p = await resposta.json();
+
+        if (!p.respondidas) {
+            document.getElementById("nivelAluno").textContent = p.nivel;
+            document.getElementById("detalheProgresso").textContent =
+                "Responda atividades para subir de nível.";
+            document.getElementById("barraNivel").style.width = "0%";
+            secao.hidden = false;
+            return;
+        }
+
+        document.getElementById("nivelAluno").textContent = p.nivel;
+
+        const partes = [
+            p.respondidas + " questão(ões) respondida(s)",
+            p.acertos + " acerto(s)",
+            p.aproveitamento + "% de aproveitamento"
+        ];
+
+        if (p.proximoNivel) {
+            partes.push(
+                "faltam " + p.faltamParaOProximo + " para " + p.proximoNivel
+            );
+        } else {
+            partes.push("nível máximo alcançado");
+        }
+
+        document.getElementById("detalheProgresso").textContent = partes.join(" · ");
+
+        const faixa = p.faltamParaOProximo + (p.respondidas - p.minimoDoNivel);
+        const avanco = faixa > 0
+            ? Math.round((p.respondidas - p.minimoDoNivel) * 100 / faixa)
+            : 100;
+
+        document.getElementById("barraNivel").style.width = avanco + "%";
+        secao.hidden = false;
+    } catch {
+        // sem progresso a mostrar, a secao continua escondida
+    }
+}
+
+carregarProgresso();
+
 // ---------- Salas em que participo ----------
 
 function montarSala(turma) {

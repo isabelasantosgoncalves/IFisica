@@ -247,3 +247,44 @@ header {
     font-weight: bold;
     text-decoration: none;
 }
+
+.progresso {
+    font-family: Arial;
+    max-width: 640px;
+    margin: 0 0 18px;
+    padding: 14px 16px;
+    background-color: white;
+    border: 1px solid #d6dde2;
+    border-radius: 10px;
+}
+
+.progresso h4 {
+    margin: 0 0 10px;
+    font-weight: normal;
+    color: #6b6b6b;
+}
+
+.progresso h4 strong {
+    color: #2b7fae;
+    font-size: 1.15rem;
+}
+
+.barra-progresso {
+    height: 10px;
+    background-color: #e8eef2;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.barra-progresso div {
+    height: 100%;
+    background-color: #3fa0d1;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+}
+
+.detalhe-progresso {
+    margin: 8px 0 0;
+    font-size: 0.85rem;
+    color: #6b6b6b;
+}

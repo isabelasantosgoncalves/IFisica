@@ -32,6 +32,8 @@
     <div class="abas">
         <button type="button" class="aba ativa" data-aba="alunos" data-so-gerente hidden>ALUNOS</button>
         <button type="button" class="aba" data-aba="atividades">ATIVIDADES</button>
+        <button type="button" class="aba" data-aba="materiais">MATERIAIS</button>
+        <button type="button" class="aba" data-aba="ranking">RANKING</button>
     </div>
 
     <section id="painelAlunos" class="painel" data-so-gerente hidden>
@@ -181,9 +183,73 @@
 
     </section>
 
+    <section id="painelMateriais" class="painel" hidden>
+
+        <div class="bloco">
+            <h3>Materiais de estudo <span id="contadorMateriais" class="contador">0</span></h3>
+            <div id="listaMateriais" class="materiais-por-assunto"></div>
+        </div>
+
+        <div class="bloco" data-so-gerente hidden>
+            <h3>Novo material</h3>
+
+            <form id="formMaterial" novalidate>
+                <label for="assuntoMaterial">Assunto</label>
+                <input id="assuntoMaterial" type="text" maxlength="100"
+                       placeholder="Ex.: Cinemática" required>
+
+                <label for="tituloMaterial">Título</label>
+                <input id="tituloMaterial" type="text" maxlength="120"
+                       placeholder="Ex.: Resumo de MRU e MRUV" required>
+
+                <label for="descricaoMaterial">Descrição (opcional)</label>
+                <textarea id="descricaoMaterial" rows="2" maxlength="255"></textarea>
+
+                <div class="escolha-tipo">
+                    <label>
+                        <input type="radio" name="tipoMaterial" value="link" checked> Link
+                    </label>
+                    <label>
+                        <input type="radio" name="tipoMaterial" value="pdf"> Arquivo PDF
+                    </label>
+                </div>
+
+                <div id="campoLink">
+                    <label for="urlMaterial">Endereço do link</label>
+                    <input id="urlMaterial" type="url" maxlength="500"
+                           placeholder="https://...">
+                </div>
+
+                <div id="campoPdf" hidden>
+                    <label for="arquivoMaterial">Arquivo PDF</label>
+                    <input type="file" id="arquivoMaterial" accept="application/pdf">
+                    <p class="dica-imagem">PDF de até 10 MB.</p>
+                    <p id="pdfEnviado" class="dica-imagem" hidden></p>
+                </div>
+
+                <div class="botoes">
+                    <button type="button" id="botaoCancelarEdicaoMaterial" hidden>Cancelar edição</button>
+                    <input type="submit" id="botaoSalvarMaterial" value="Adicionar material">
+                </div>
+            </form>
+        </div>
+
+    </section>
+
+    <section id="painelRanking" class="painel" hidden>
+
+        <div class="bloco">
+            <h3>Ranking da sala</h3>
+            <p class="dica-imagem">Ordenado por total de acertos nas atividades da sala.</p>
+            <ol id="listaRanking" class="lista-ranking"></ol>
+        </div>
+
+    </section>
+
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/pagTurma.js') }}"></script>
+<script src="{{ url_for('static', filename='js/pagTurmaExtras.js') }}"></script>
 {% endblock %}
