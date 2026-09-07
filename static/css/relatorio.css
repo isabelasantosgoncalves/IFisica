@@ -1,0 +1,143 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(46, 43, 43);
+    margin: 0;
+    padding: 24px;
+    background-color: #f7f8f9;
+}
+
+.topo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid #3fa0d1;
+}
+
+.topo h2 { margin: 0; font-size: 1.4rem; }
+
+.info-turma { margin: 4px 0 0; color: #6b6b6b; font-size: 0.9rem; }
+
+.topo a { margin-left: auto; }
+
+.topo button {
+    padding: 10px 18px;
+    border: none;
+    background-color: #c87623;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cartoes-resumo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 22px 0;
+}
+
+.cartao-numero {
+    background-color: white;
+    border: 1px solid #d6dde2;
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cartao-numero.destaque { border-color: #3fa0d1; background-color: #e4f0f7; }
+
+.cartao-numero .numero {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #2b7fae;
+    font-variant-numeric: tabular-nums;
+}
+
+.cartao-numero .rotulo { font-size: 0.8rem; color: #6b6b6b; }
+
+.bloco {
+    background-color: white;
+    border: 1px solid #d6dde2;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+}
+
+.bloco h3 { margin: 0 0 4px; font-size: 1.05rem; }
+
+.dica { margin: 0 0 14px; font-size: 0.83rem; color: #6b6b6b; }
+
+.rolagem { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+th, td {
+    text-align: left;
+    padding: 9px 10px;
+    border-bottom: 1px solid #e8eef2;
+    vertical-align: top;
+}
+
+th {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6b6b6b;
+    border-bottom: 1px solid #b9c5cd;
+    white-space: nowrap;
+}
+
+td { font-variant-numeric: tabular-nums; }
+
+.coluna-larga { min-width: 260px; }
+
+.bom      { color: #1e7e34; font-weight: bold; }
+.medio    { color: #b26414; font-weight: bold; }
+.ruim     { color: #c0392b; font-weight: bold; }
+.sem-dado { color: #9aa5ac; }
+
+.vazio { color: #6b6b6b; }
+
+.lista-dificeis {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.questao-dificil .pergunta {
+    margin: 0 0 4px;
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+.questao-dificil .numeros {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    color: #6b6b6b;
+}
+
+.questao-dificil .barra {
+    height: 8px;
+    background-color: #e8eef2;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.questao-dificil .barra div {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.questao-dificil .barra .bom   { background-color: #1e7e34; }
+.questao-dificil .barra .medio { background-color: #d18b3a; }
+.questao-dificil .barra .ruim  { background-color: #c0392b; }

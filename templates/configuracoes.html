@@ -1,24 +1,71 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% extends "base.html" %}
 
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
-</head>
+{% block titulo %}Configurações | IFísica{% endblock %}
 
-<body>
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/conteudo.css') }}">
+{% endblock %}
 
-    <img src="https://www.viacaomouraoense.com.br/site/banner_manutencao.jpg" width="700">
+{% block conteudo %}
+<header class="topo">
+    {% include "_marca.html" %}
+    <div>
+        <h2>Configurações</h2>
+        <p>Segurança e acesso da sua conta.</p>
+    </div>
+    <a href="{{ url_for('pagina.telaInicial') }}">
+        <button type="button">Página inicial</button>
+    </a>
+</header>
 
-</body>
-</html>
+<span id="aviso" class="aviso"></span>
+
+<section class="cartao">
+    <h3>Trocar a senha</h3>
+    <p class="detalhe">
+        A nova senha precisa ter pelo menos 6 caracteres. Depois de trocar, você continua
+        conectado nesta sessão.
+    </p>
+
+    <form id="formSenha" novalidate>
+        <label for="senhaAtual">Senha atual</label>
+        <input id="senhaAtual" name="senhaAtual" type="password" required>
+
+        <label for="senhaNova">Nova senha</label>
+        <input id="senhaNova" name="senhaNova" type="password" minlength="6" required>
+
+        <label for="senhaConfirma">Repita a nova senha</label>
+        <input id="senhaConfirma" name="senhaConfirma" type="password" minlength="6" required>
+
+        <div class="botoes">
+            <input type="submit" value="Trocar senha">
+        </div>
+    </form>
+</section>
+
+<section class="cartao">
+    <h3>Sessão</h3>
+    <p class="detalhe">
+        Sua sessão expira sozinha depois de 8 horas. Em computador compartilhado, saia ao
+        terminar em vez de só fechar a aba.
+    </p>
+    <div class="botoes">
+        <a href="{{ url_for('pagina.sair') }}">
+            <button type="button" class="perigo">Sair da conta</button>
+        </a>
+    </div>
+</section>
+
+<section class="cartao">
+    <h3>Seus dados</h3>
+    <p class="detalhe">
+        Nome, telefone e gênero ficam no
+        <a href="{{ url_for('pagina.perfil') }}">seu perfil</a>.
+        O e-mail é o que identifica sua conta e não pode ser trocado por aqui.
+    </p>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/configuracoes.js') }}"></script>
+{% endblock %}

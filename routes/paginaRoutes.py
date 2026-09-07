@@ -86,6 +86,29 @@ def painelAdmin():
     return render_template("painelAdmin.html")
 
 
+@pagina_bp.route("/turma/<int:id_turma>/relatorio")
+@ensino_obrigatorio
+def relatorioTurma(id_turma):
+    return render_template("relatorio.html", id_turma=id_turma)
+
+
+@pagina_bp.route("/perfil")
+@login_obrigatorio
+def perfil():
+    return render_template("perfil.html", generos=GENEROS)
+
+
+@pagina_bp.route("/configuracoes")
+@login_obrigatorio
+def configuracoes():
+    return render_template("configuracoes.html")
+
+
+@pagina_bp.route("/sobre")
+def sobre():
+    return render_template("sobre.html")
+
+
 @pagina_bp.route("/ajuda")
 def ajuda():
     return render_template("ajuda.html")

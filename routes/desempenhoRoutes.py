@@ -44,3 +44,24 @@ def meu_progresso():
         }), 500
 
     return jsonify(progresso), 200
+
+
+@desempenho_bp.route("/turmas/<int:id_turma>/relatorio", methods=["GET"])
+@login_obrigatorio_api
+def relatorio(id_turma):
+
+    if not modelo_turma.buscar(id_turma, session["idUsuario"]):
+        return jsonify({
+            "erro": "Só o responsável pela sala vê o relatório."
+        }), 403
+
+    try:
+        dados = modelo_desempenho.relatorio_da_turma(id_turma)
+
+    except mysql.connector.Error as erro:
+        return jsonify({
+            "erro": "Erro ao montar o relatório.",
+            "detalhes": str(erro)
+        }), 500
+
+    return jsonify(dados), 200

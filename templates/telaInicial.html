@@ -19,8 +19,9 @@
         <ul>
             <li><a href="{{ url_for('pagina.telaInicial') }}">Página inicial</a></li>
             <li><a href="{{ url_for('pagina.ajuda') }}">Ajuda</a></li>
-            <li><a href="#">Configurações</a></li>
-            <li><a href="#">Sobre</a></li>
+            <li><a href="{{ url_for('pagina.perfil') }}">Meu perfil</a></li>
+            <li><a href="{{ url_for('pagina.configuracoes') }}">Configurações</a></li>
+            <li><a href="{{ url_for('pagina.sobre') }}">Sobre</a></li>
             <li><a href="{{ url_for('pagina.sair') }}">Sair</a></li>
         </ul>
     </nav>
@@ -88,9 +89,7 @@
     <ul>
         {% if ensina %}
         <li><a href="{{ url_for('pagina.novaTurma') }}">Turma</a></li>
-        <li><a href="#">Atividades</a></li>
-        <li><a href="#">Relatório</a></li>
-        <li><a href="#">Materiais de aula</a></li>
+
         {% else %}
         <li><a href="{{ url_for('pagina.solicitarTutor') }}">Quero ser tutor</a></li>
         {% endif %}

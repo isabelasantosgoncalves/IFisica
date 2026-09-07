@@ -15,9 +15,15 @@
             <h2 id="nomeTurma">Carregando…</h2>
             <p id="infoTurma" class="info-turma"></p>
         </div>
-        <a href="{{ url_for('pagina.telaInicial') }}">
-            <button type="button">Página inicial</button>
-        </a>
+        <div class="acoes-topo">
+            <a href="{{ url_for('pagina.relatorioTurma', id_turma=id_turma) }}"
+               data-so-gerente hidden>
+                <button type="button">Relatório</button>
+            </a>
+            <a href="{{ url_for('pagina.telaInicial') }}">
+                <button type="button">Página inicial</button>
+            </a>
+        </div>
     </header>
 
     <p id="descricaoTurma" class="descricao-turma"></p>

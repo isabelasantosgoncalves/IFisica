@@ -23,7 +23,8 @@ IFisica/
 │   ├── atividade.py          atividade e suas questões
 │   ├── resposta_atividade.py respostas do estudante e pontuação
 │   ├── material.py           materiais de estudo
-│   └── desempenho.py         ranking e faixas de nível
+│   ├── desempenho.py         ranking, relatório e faixas de nível
+│   └── perfil.py             edição dos dados e da senha
 ├── routes/
 │   ├── seguranca.py          sessão e permissão por papel
 │   ├── utilitarios.py        normalização de entrada e datas
@@ -36,7 +37,8 @@ IFisica/
 │   ├── atividadeRoutes.py    atividades da sala
 │   ├── respostaRoutes.py     estudante respondendo atividade
 │   ├── materialRoutes.py     materiais de estudo da sala
-│   ├── desempenhoRoutes.py   ranking da sala e nível do estudante
+│   ├── desempenhoRoutes.py   ranking, relatório e nível
+│   ├── perfilRoutes.py       perfil e troca de senha
 │   └── uploadRoutes.py       envio de imagem e PDF
 ├── templates/                base.html e as telas que a estendem
 └── static/
@@ -181,6 +183,10 @@ solicitação em vez de num erro.
 | `/turma/<id>/atividades/<id>` | estudante respondendo a atividade |
 | `/solicitar-tutor` | formulário de pedido de permissão de tutor |
 | `/admin/solicitacoes` | painel do administrador |
+| `/turma/<id>/relatorio` | relatório de desempenho da sala (responsável) |
+| `/perfil` | dados pessoais, nível e salas do usuário |
+| `/configuracoes` | troca de senha e sessão |
+| `/sobre` | o que é o IFísica |
 | `/ajuda` | guia prático em PDF |
 
 A página da sala é a mesma para tutor e estudante: o front esconde código de convite, pedidos
@@ -216,6 +222,10 @@ todas exigem sessão ativa.
 | `POST` `/` `PUT` `/` `DELETE` | `/api/turmas/<id>/materiais[/<id>]` | gerencia materiais (responsável) |
 | `GET` | `/api/turmas/<id>/ranking` | ranking da sala por acertos |
 | `GET` | `/api/meu-progresso` | questões respondidas, acertos e nível do usuário |
+| `GET` | `/api/turmas/<id>/relatorio` | desempenho por aluno, atividade e questão (responsável) |
+| `GET` | `/api/perfil` | dados do usuário, nível e salas |
+| `PUT` | `/api/perfil` | edita nome, telefone e gênero |
+| `PUT` | `/api/perfil/senha` | troca a senha, conferindo a atual |
 | `PUT` `/` `DELETE` | `/api/exercicios/<id>` | edita ou remove uma questão |
 | `GET` `/` `POST` | `/api/turmas/<id>/atividades` | atividades da sala |
 | `GET` `/` `PUT` `/` `DELETE` | `/api/turmas/<id>/atividades/<id>` | uma atividade |
@@ -290,6 +300,19 @@ As faixas estão em `NIVEIS_ALUNO`, em `models/constantes.py`:
 
 Mudar as faixas é editar essa tupla; nada no banco precisa mudar.
 
+## Relatório do tutor
+
+Em cada sala, o responsável tem um relatório com:
+
+- **Resumo**: alunos na sala, quantos já responderam, quantos ainda não, número de atividades
+  e aproveitamento geral
+- **Questões que mais derrubaram**: as cinco com menor percentual de acerto, com barra visual
+- **Por aluno**: atividades feitas, acertos e aproveitamento
+- **Por atividade**: quem fez, acertos e média
+- **Por questão**: respostas, acertos e percentual
+
+Tudo calculado na hora a partir das respostas, sem tabela intermediária.
+
 ## Integração com o módulo de alunos
 
 O outro grupo desenvolveu em **Java / Spring Boot**, com um modelo de dados próprio
@@ -310,9 +333,10 @@ O banco continua compartilhado, então valem os cuidados:
 
 ## Próximos passos
 
-- Relatórios do tutor: desempenho por aluno e por questão
-- Telas `sobre`, `configuracoes` e `conta` ainda são o cartaz de "em manutenção"
-- Perfil do usuário
+- Materiais e atividades ainda são por sala; um acervo compartilhado entre as salas do mesmo
+  tutor evitaria recadastrar a mesma questão
+- Exportar o relatório da sala em PDF
+- Notificar o estudante quando a entrada na sala for aprovada
 
 ## Scripts de apoio
 

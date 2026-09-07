@@ -40,6 +40,8 @@ GENEROS = (
 
 CODIGOS_GENERO = {codigo for codigo, _ in GENEROS}
 
+ROTULOS_GENERO = dict(GENEROS)
+
 GENERO_AUTODECLARACAO = "autodeclaracao"
 
 NIVEIS_ALUNO = (

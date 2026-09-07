@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block titulo %}Meu perfil | IFísica{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/conteudo.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<header class="topo">
+    {% include "_marca.html" %}
+    <div>
+        <h2>Meu perfil</h2>
+        <p id="resumoPapel">Carregando…</p>
+    </div>
+    <a href="{{ url_for('pagina.telaInicial') }}">
+        <button type="button">Página inicial</button>
+    </a>
+</header>
+
+<span id="aviso" class="aviso"></span>
+
+<section class="cartao" id="cartaoNivel" hidden>
+    <h3>Seu nível: <strong id="nivelAluno">—</strong></h3>
+    <div class="barra-progresso"><div id="barraNivel"></div></div>
+    <p id="detalheProgresso" class="detalhe"></p>
+</section>
+
+<section class="cartao">
+    <h3>Dados pessoais</h3>
+
+    <form id="formPerfil" novalidate>
+        <label for="nome">Nome</label>
+        <input id="nome" name="nome" type="text" maxlength="100" required>
+
+        <label for="telefone">Telefone</label>
+        <input id="telefone" name="telefone" type="tel" maxlength="20" required>
+
+        <label for="genero">Gênero</label>
+        <select id="genero" name="genero">
+            <option value="">Prefiro não escolher</option>
+            {% for codigo, rotulo in generos %}
+            <option value="{{ codigo }}">{{ rotulo }}</option>
+            {% endfor %}
+        </select>
+
+        <div id="campoAutodeclaracao" hidden>
+            <label for="generoAutodeclarado">Como você se autodeclara</label>
+            <input id="generoAutodeclarado" name="generoAutodeclarado"
+                   type="text" maxlength="120">
+        </div>
+
+        <p class="somente-leitura">
+            E-mail: <strong id="email">—</strong> ·
+            Nascimento: <strong id="dataNasc">—</strong>
+            <br>
+            <span class="detalhe">O e-mail é usado para entrar e não pode ser alterado aqui.</span>
+        </p>
+
+        <div class="botoes">
+            <input type="submit" value="Salvar alterações">
+        </div>
+    </form>
+</section>
+
+<section class="cartao">
+    <h3>Minhas salas</h3>
+
+    <h4 class="subtitulo" id="tituloGerencia" hidden>Salas que eu conduzo</h4>
+    <ul id="salasGerencia" class="lista-salas"></ul>
+
+    <h4 class="subtitulo">Salas em que participo</h4>
+    <ul id="salasParticipa" class="lista-salas"></ul>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
+{% endblock %}

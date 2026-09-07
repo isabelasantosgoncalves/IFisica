@@ -1,24 +1,112 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% extends "base.html" %}
 
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
-</head>
+{% block titulo %}Relatório da sala | IFísica{% endblock %}
 
-<body>
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/relatorio.css') }}">
+{% endblock %}
 
-    <img src="https://www.viacaomouraoense.com.br/site/banner_manutencao.jpg" width="700">
+{% block conteudo %}
+<div id="pagina" data-id-turma="{{ id_turma }}">
 
-</body>
-</html>
+    <header class="topo">
+        {% include "_marca.html" %}
+        <div>
+            <h2>Relatório da sala</h2>
+            <p id="nomeTurma" class="info-turma">Carregando…</p>
+        </div>
+        <a href="{{ url_for('pagina.pagTurma', id_turma=id_turma) }}">
+            <button type="button">Voltar para a sala</button>
+        </a>
+    </header>
+
+    <span id="aviso" class="aviso"></span>
+
+    <section class="cartoes-resumo" id="resumo" hidden>
+        <div class="cartao-numero">
+            <span class="numero" id="numAlunos">—</span>
+            <span class="rotulo">alunos na sala</span>
+        </div>
+        <div class="cartao-numero">
+            <span class="numero" id="numResponderam">—</span>
+            <span class="rotulo">já responderam</span>
+        </div>
+        <div class="cartao-numero">
+            <span class="numero" id="numSemResponder">—</span>
+            <span class="rotulo">sem responder</span>
+        </div>
+        <div class="cartao-numero">
+            <span class="numero" id="numAtividades">—</span>
+            <span class="rotulo">atividades</span>
+        </div>
+        <div class="cartao-numero destaque">
+            <span class="numero" id="numAproveitamento">—</span>
+            <span class="rotulo">aproveitamento da sala</span>
+        </div>
+    </section>
+
+    <section class="bloco">
+        <h3>Questões que mais derrubaram</h3>
+        <p class="dica">As cinco com menor percentual de acerto. Boas candidatas a revisão.</p>
+        <ol id="listaDificeis" class="lista-dificeis"></ol>
+    </section>
+
+    <section class="bloco">
+        <h3>Desempenho por aluno</h3>
+        <div class="rolagem">
+            <table id="tabelaAlunos">
+                <thead>
+                    <tr>
+                        <th>Aluno</th>
+                        <th>Atividades</th>
+                        <th>Acertos</th>
+                        <th>Aproveitamento</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="bloco">
+        <h3>Desempenho por atividade</h3>
+        <div class="rolagem">
+            <table id="tabelaAtividades">
+                <thead>
+                    <tr>
+                        <th>Atividade</th>
+                        <th>Quem fez</th>
+                        <th>Acertos</th>
+                        <th>Média</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="bloco">
+        <h3>Desempenho por questão</h3>
+        <div class="rolagem">
+            <table id="tabelaQuestoes">
+                <thead>
+                    <tr>
+                        <th>Questão</th>
+                        <th>Matéria</th>
+                        <th>Dificuldade</th>
+                        <th>Respostas</th>
+                        <th>Acertos</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/relatorio.js') }}"></script>
+{% endblock %}

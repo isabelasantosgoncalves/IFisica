@@ -1,24 +1,68 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% extends "base.html" %}
 
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
-</head>
+{% block titulo %}Sobre | IFísica{% endblock %}
 
-<body>
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/conteudo.css') }}">
+{% endblock %}
 
-    <img src="https://www.viacaomouraoense.com.br/site/banner_manutencao.jpg" width="700">
+{% block conteudo %}
+<header class="topo">
+    {% include "_marca.html" %}
+    <div>
+        <h2>Sobre o IFísica</h2>
+        <p>Uma plataforma de física feita por estudantes, para estudantes.</p>
+    </div>
+    <a href="{{ url_for('pagina.index') }}">
+        <button type="button">Voltar</button>
+    </a>
+</header>
 
-</body>
-</html>
+<section class="texto">
+    <p>
+        O IFísica nasceu como projeto escolar e virou uma plataforma onde professores montam
+        salas de física, criam questões e acompanham o desempenho da turma — e onde estudantes
+        respondem atividades, veem onde erraram e aprendem com a resolução.
+    </p>
+
+    <h3>Como funciona</h3>
+
+    <p>
+        Todo mundo entra como estudante. Quem quer dar aula pede permissão de tutor, explicando
+        o motivo, o conteúdo que pretende ensinar e para quem. Um administrador analisa o pedido.
+    </p>
+
+    <p>
+        Aprovado, o tutor cria salas com código de convite, monta um banco de questões com
+        imagem e resolução, e reúne as questões em atividades. O estudante entra na sala com o
+        código, responde as atividades e recebe a correção na hora, questão por questão.
+    </p>
+
+    <h3>O que tem dentro</h3>
+
+    <ul>
+        <li>Salas com código de convite e aprovação de entrada pelo responsável</li>
+        <li>Banco de questões com matéria, dificuldade, imagem e resolução</li>
+        <li>Atividades montadas a partir das questões escolhidas</li>
+        <li>Correção automática, sem o gabarito nunca sair do servidor</li>
+        <li>Materiais de estudo em link ou PDF, agrupados por assunto</li>
+        <li>Ranking da sala e nível do estudante por questões respondidas</li>
+        <li>Relatório de desempenho por aluno, por atividade e por questão</li>
+    </ul>
+
+    <h3>Privacidade</h3>
+
+    <p>
+        As senhas são guardadas com hash, nunca em texto. O campo de gênero é opcional, tem
+        autodeclaração livre e a opção de não informar — e o valor não muda nada no
+        funcionamento da plataforma.
+    </p>
+
+    <h3>Precisa de ajuda?</h3>
+
+    <p>
+        O <a href="{{ url_for('pagina.ajuda') }}">guia prático</a> explica o passo a passo de
+        cada tela, e pode ser baixado em PDF.
+    </p>
+</section>
+{% endblock %}

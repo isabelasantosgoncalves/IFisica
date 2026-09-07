@@ -490,3 +490,9 @@ body {
         white-space: normal;
     }
 }
+
+.acoes-topo {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}

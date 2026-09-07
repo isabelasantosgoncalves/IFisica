@@ -11,6 +11,7 @@ from routes.exercicioRoutes import exercicio_bp
 from routes.respostaRoutes import resposta_bp
 from routes.desempenhoRoutes import desempenho_bp
 from routes.materialRoutes import material_bp
+from routes.perfilRoutes import perfil_bp
 from routes.uploadRoutes import upload_bp
 
 
@@ -32,6 +33,7 @@ def criar_app():
     app.register_blueprint(upload_bp, url_prefix="/api")
     app.register_blueprint(material_bp, url_prefix="/api")
     app.register_blueprint(desempenho_bp, url_prefix="/api")
+    app.register_blueprint(perfil_bp, url_prefix="/api")
 
     return app
 
