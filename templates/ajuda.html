@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block titulo %}Ajuda | IFísica{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ajuda.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<header class="topo-ajuda">
+    {% include "_marca.html" %}
+    <div>
+        <h2>Guia prático</h2>
+        <p>Como usar o IFísica, do cadastro à correção das atividades.</p>
+    </div>
+    <a href="{{ url_for('pagina.telaInicial') }}">
+        <button type="button">Página inicial</button>
+    </a>
+</header>
+
+<section class="acoes">
+    <a class="botao-download"
+       href="{{ url_for('static', filename='docs/guia-pratico-ifisica.pdf') }}"
+       download>Baixar o guia em PDF</a>
+    <a class="link-simples"
+       href="{{ url_for('static', filename='docs/guia-pratico-ifisica.pdf') }}"
+       target="_blank" rel="noopener">Abrir em uma aba nova</a>
+</section>
+
+<object class="visor"
+        data="{{ url_for('static', filename='docs/guia-pratico-ifisica.pdf') }}"
+        type="application/pdf">
+    <p class="sem-visor">
+        Seu navegador não consegue mostrar o PDF aqui dentro.
+        <a href="{{ url_for('static', filename='docs/guia-pratico-ifisica.pdf') }}">
+            Baixe o guia
+        </a>
+        para ler.
+    </p>
+</object>
+
+<section class="resumo">
+    <h3>Resumo rápido</h3>
+
+    <dl>
+        <dt>Todo cadastro começa como estudante</dt>
+        <dd>Para criar salas é preciso pedir permissão de tutor em "Quero ser tutor".</dd>
+
+        <dt>Quem aprova é o administrador</dt>
+        <dd>O pedido aparece no painel dele com motivo, conteúdo e público-alvo.</dd>
+
+        <dt>Entrar numa sala</dt>
+        <dd>O tutor passa o código de convite; o estudante digita na página inicial e aguarda
+            o tutor aprovar a entrada.</dd>
+
+        <dt>Atividades</dt>
+        <dd>O tutor monta questões no banco da sala e junta as escolhidas em uma atividade.
+            O estudante responde uma vez e vê a pontuação na hora.</dd>
+    </dl>
+</section>
+{% endblock %}

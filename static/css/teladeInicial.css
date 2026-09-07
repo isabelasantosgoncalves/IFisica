@@ -1,0 +1,201 @@
+body {
+    background-color: rgb(255, 255, 255);
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+header {
+    width: 100%;
+}
+
+/* MENU HORIZONTAL */
+.horizontal ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #1971b5;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.horizontal li a {
+    display: block;
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.horizontal li a:hover {
+    background-color: #dd870e;
+}
+
+/* MENU VERTICAL */
+.vertical ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1;
+}
+
+.vertical li a {
+    display: block;
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.vertical li a:hover {
+    background-color: #dd870e;
+    color: white;
+}
+.img-canto {
+        position: absolute; /* Posiciona em relação ao body */
+        bottom: 10px;       /* Distância da parte inferior */
+        right: 10px;        /* Distância da parte direita */
+        width: 150px;       /* Ajuste do tamanho */
+        height: auto;       /* Mantém proporção */
+    }
+/* botão */
+.menu-btn {
+    font-size: 25px;
+    background-color: #dd870e;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+/* menu escondido */
+.menu-vertical {
+    position: fixed;
+    top: 0;
+    left: -220px; /* escondido */
+    width: 200px;
+    height: 100%;
+    background-color: #f1f1f1;
+    transition: 0.3s;
+}
+
+/* quando abrir */
+.menu-vertical.ativo {
+    left: 0;
+}
+
+.menu-vertical ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-vertical li a {
+    display: block;
+    padding: 12px;
+    color: black;
+    text-decoration: none;
+}
+
+.menu-vertical li a:hover {
+    background-color: #dd870e;
+    color: white;
+}
+.fab {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: orange;
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+}
+#rodape {
+    color: #777;
+    margin: 30px 0;
+    padding: 30px 0;
+}
+/* resumo.css */
+
+.resumo-guia {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px 80px;
+  gap: 40px;
+}
+
+.resumo-texto {
+  flex: 1;
+  max-width: 600px;
+}
+
+.resumo-texto h2 {
+  color: #1565C0;
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.resumo-texto p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.guia-pratico {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.guia-pratico a {
+  text-decoration: none;
+}
+
+.play-botao {
+  background-color: #FFA726;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.play-botao:hover {
+  transform: scale(1.08);
+}
+
+.play-icone {
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 24px solid white;
+  margin-left: 6px;
+}
+
+.guia-texto {
+  color: #1565C0;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.logo-canto {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-img {
+    width: 60px;
+}
+
+.logo-texto h1 {
+    color: #000;
+    font-size: 24px;
+    margin: 0;
+    line-height: 1.1;
+}

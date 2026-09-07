@@ -41,5 +41,3 @@ GENEROS = (
 CODIGOS_GENERO = {codigo for codigo, _ in GENEROS}
 
 GENERO_AUTODECLARACAO = "autodeclaracao"
-
-TIPO_PADRAO = "Regular"

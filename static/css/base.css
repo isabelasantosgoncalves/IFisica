@@ -1,3 +1,7 @@
+[hidden] {
+    display: none !important;
+}
+
 .aviso {
     display: block;
     min-height: 18px;

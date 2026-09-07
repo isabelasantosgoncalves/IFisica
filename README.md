@@ -16,20 +16,29 @@ IFisica/
 │   └── migracoes/            alterações a rodar no Workbench, em ordem
 ├── models/
 │   ├── constantes.py         níveis, gêneros, status e papéis
-│   ├── usuario.py            SQL do usuário e papel (estudante/tutor/admin)
-│   ├── solicitacao.py        SQL do pedido de permissão de tutor
-│   └── turma.py              SQL da turma
+│   ├── usuario.py            usuário e papel (estudante/tutor/admin)
+│   ├── solicitacao.py        pedido de permissão de tutor
+│   ├── turma.py              sala, código de convite e participantes
+│   ├── exercicio.py          banco de questões
+│   ├── atividade.py          atividade e suas questões
+│   └── resposta_atividade.py respostas do estudante e pontuação
 ├── routes/
 │   ├── seguranca.py          sessão e permissão por papel
-│   ├── utilitarios.py        normalização de entrada
+│   ├── utilitarios.py        normalização de entrada e datas
 │   ├── paginaRoutes.py       telas renderizadas
-│   ├── authRoutes.py         cadastro e login do usuário
-│   ├── solicitacaoRoutes.py  pedido de tutoria e decisão do administrador
-│   └── turmaRoutes.py        API de turmas
+│   ├── authRoutes.py         cadastro e login
+│   ├── solicitacaoRoutes.py  tutoria e painel do administrador
+│   ├── turmaRoutes.py        salas
+│   ├── salaRoutes.py         entrada do estudante numa sala
+│   ├── exercicioRoutes.py    banco de questões
+│   ├── atividadeRoutes.py    atividades da sala
+│   ├── respostaRoutes.py     estudante respondendo atividade
+│   └── uploadRoutes.py       envio de imagem para a questão
 ├── templates/                base.html e as telas que a estendem
 └── static/
     ├── css/
     ├── js/
+    ├── docs/                 guia prático em PDF
     └── images/
 ```
 
@@ -84,16 +93,24 @@ adivinhável, dá para forjar um cookie e entrar como qualquer docente. Gere com
 As tabelas já existem no servidor compartilhado — `database/schema.sql` é o retrato delas,
 somente aditivo, sem `DROP` nem `TRUNCATE`.
 
-Faltam as migrações de `database/migracoes/`, que **precisam ser combinadas com a colega**
-antes de rodar, porque o banco é dos dois grupos. No Workbench, `File` → `Open SQL Script`,
-uma de cada vez, na ordem:
+As migrações de `database/migracoes/` **já foram aplicadas no servidor**. Ficam no repositório
+para o histórico e para quem precisar montar o banco do zero — nesse caso, no Workbench,
+`File` → `Open SQL Script`, uma de cada vez, na ordem:
 
 | Arquivo | O que faz | Obrigatória |
 | --- | --- | --- |
 | `001_auto_increment.sql` | põe `AUTO_INCREMENT` em 8 chaves primárias | sim, nada insere sem ela |
 | `002_email_unico.sql` | separa o índice `UNIQUE (email, telefone)` em dois | recomendada |
-| `003_papeis_e_solicitacao.sql` | gênero, conteúdo/público-alvo da solicitação, e solta o `UNIQUE` de `Turma.idSolicitacao` | sim, para o cadastro e as turmas |
-| `004_nome_turma_por_tutor.sql` | nome de turma passa a ser único por tutor, não global | sim |
+| `003_papeis_e_solicitacao.sql` | gênero, conteúdo/público-alvo da solicitação, e solta o `UNIQUE` de `Turma.idSolicitacao` | sim |
+| `004_nome_turma_por_tutor.sql` | nome de sala passa a ser único por tutor, não global | sim |
+| `005_codigo_convite.sql` | `tipo` com padrão e `codigoConvite` na sala | sim |
+| `006_renomear_titulo_atividade.sql` | `Atividade.titulo` vira `Atividade.nome` | sim |
+| `007_resposta_atividade.sql` | tabelas `RealizacaoAtividade` e `RespostaAtividade` | sim |
+| `008_resolucao_exercicio.sql` | `resolucao` na questão, mostrada ao aluno na correção | sim |
+| `009_imagem_exercicio.sql` | `imagem` na questão | sim |
+
+Como o banco é compartilhado com o grupo do módulo de alunos, qualquer migração nova precisa
+ser combinada antes de rodar. `conferencia.sql` confere as quatro primeiras.
 
 ### 4. Subir a aplicação
 
@@ -103,17 +120,17 @@ uma de cada vez, na ordem:
 
 Acesse `http://localhost:5000`.
 
-### 5. Criar o primeiro administrador
+### 5. Administrador
 
-A tabela `Admin` nasce vazia, e sem ninguém nela não existe quem aprove solicitações de tutor.
-Depois de se cadastrar pela tela, descubra seu id e insira:
+Já existe um administrador no banco: **admin@gmail.com**. É a conta que aprova os pedidos de
+permissão de tutor.
+
+Para promover outra pessoa, a tabela `Admin` recebe o id dela — não há caminho pela aplicação:
 
 ```sql
 SELECT idUsuario, nome, email FROM IFisica.Usuario;
-INSERT INTO IFisica.Admin (idUsuario) VALUES (SEU_ID);
+INSERT INTO IFisica.Admin (idUsuario) VALUES (O_ID);
 ```
-
-Recarregue `/inicio`: o menu passa a mostrar "Solicitações pendentes".
 
 ## Papéis
 
@@ -150,13 +167,19 @@ solicitação em vez de num erro.
 | Rota | Tela |
 | --- | --- |
 | `/` | abertura, com criar conta e login |
-| `/cadastro` | cadastro do docente |
+| `/cadastro` | cadastro do usuário |
 | `/login` | entrada na plataforma |
-| `/inicio` | página inicial com o menu e a lista de turmas |
-| `/nova-turma` | passo 1, nome e descrição da turma (tutor) |
+| `/inicio` | página inicial: salas em que participa, entrar em sala, suas salas |
+| `/nova-turma` | passo 1, nome e descrição da sala (tutor) |
 | `/nova-turma/escolaridade` | passo 2, nível de escolaridade, e criação (tutor) |
+| `/turma/<id>` | a sala: alunos, pedidos, questões e atividades |
+| `/turma/<id>/atividades/<id>` | estudante respondendo a atividade |
 | `/solicitar-tutor` | formulário de pedido de permissão de tutor |
-| `/admin/solicitacoes` | painel do administrador com os pedidos pendentes |
+| `/admin/solicitacoes` | painel do administrador |
+| `/ajuda` | guia prático em PDF |
+
+A página da sala é a mesma para tutor e estudante: o front esconde código de convite, pedidos
+de entrada, banco de questões e criação de atividades para quem não é o responsável.
 
 ## API
 
@@ -167,16 +190,27 @@ todas exigem sessão ativa.
 | --- | --- | --- |
 | `POST` | `/api/usuarios` | cadastra um usuário e já abre a sessão |
 | `POST` | `/api/login` | autentica e abre a sessão |
-| `POST` | `/api/turmas` | cria uma turma (exige papel de tutor) |
-| `GET` | `/api/turmas` | lista as turmas que o usuário gerencia |
-| `GET` | `/api/turmas/<id>` | busca uma turma |
-| `PUT` | `/api/turmas/<id>` | atualiza uma turma |
-| `DELETE` | `/api/turmas/<id>` | exclui uma turma |
 | `POST` | `/api/solicitacoes` | envia um pedido de permissão de tutor |
 | `GET` | `/api/solicitacoes/minha` | situação do próprio pedido |
 | `GET` | `/api/solicitacoes` | lista os pendentes (administrador) |
 | `GET` | `/api/solicitacoes/<id>` | detalha um pedido (administrador) |
-| `PUT` | `/api/solicitacoes/<id>` | aprova ou recusa, com `{"aprovar": true}` ou `false` (administrador) |
+| `PUT` | `/api/solicitacoes/<id>` | aprova ou recusa (administrador) |
+| `POST` | `/api/turmas` | cria uma sala (exige tutoria aprovada) |
+| `GET` | `/api/turmas` | lista as salas que o usuário gerencia |
+| `GET` | `/api/turmas/minhas-participacoes` | lista as salas em que o usuário entrou |
+| `GET` | `/api/turmas/<id>` | dados da sala, com `souGerente` |
+| `PUT` `/` `DELETE` | `/api/turmas/<id>` | atualiza ou exclui a sala |
+| `GET` | `/api/turmas/<id>/participantes` | alunos da sala (responsável) |
+| `POST` | `/api/salas/entrar` | estudante pede entrada com o código de convite |
+| `GET` | `/api/turmas/<id>/solicitacoes-entrada` | pedidos pendentes (responsável) |
+| `PUT` | `/api/solicitacoes-entrada/<id>` | aprova ou recusa a entrada (responsável) |
+| `GET` `/` `POST` | `/api/exercicios` | banco de questões (só tutor) |
+| `POST` | `/api/uploads/exercicios` | envia a imagem de uma questão (só tutor) |
+| `PUT` `/` `DELETE` | `/api/exercicios/<id>` | edita ou remove uma questão |
+| `GET` `/` `POST` | `/api/turmas/<id>/atividades` | atividades da sala |
+| `GET` `/` `PUT` `/` `DELETE` | `/api/turmas/<id>/atividades/<id>` | uma atividade |
+| `GET` | `/api/turmas/<id>/atividades/<id>/questoes` | questões para responder, sem gabarito |
+| `POST` | `/api/turmas/<id>/atividades/<id>/respostas` | envia as respostas e recebe a pontuação |
 
 `GET /logout` não é API: encerra a sessão e redireciona para a abertura.
 
@@ -208,37 +242,48 @@ As demais (`Exercicio`, `Lista`, `ListaExercicio`, `RealizarLista`, `Resposta`, 
 
 ## Estado atual
 
-Pronto: cadastro com gênero autodeclarado, login, sessão, papéis derivados, proteção de rotas
-por papel, CRUD de turmas e as seis telas. O SQL fica em `models/`, as rotas só validam entrada
-e formatam resposta, e as conexões saem de um pool com `commit`/`rollback` garantidos.
+Funciona de ponta a ponta: cadastro com gênero autodeclarado, login, pedido e aprovação de
+tutoria, criação de sala com código de convite, banco de questões, montagem de atividades,
+entrada do estudante na sala mediante aprovação do responsável, e o estudante respondendo a
+atividade e recebendo a pontuação na hora.
+
+O gabarito nunca é enviado ao estudante: a correção acontece no servidor, e a rota do banco
+de questões é restrita a tutores. Depois de responder, o estudante vê a correção questão por
+questão — o que marcou, qual era a certa e a resolução escrita pelo professor.
+
+Questões aceitam imagem opcional (JPG, PNG, GIF ou WEBP, até 3 MB). O arquivo é validado pelo
+conteúdo, não pela extensão, salvo com nome aleatório em `static/uploads/exercicios`, e só o
+nome fica no banco.
+
+Pendências ficam visíveis: a página inicial do administrador avisa quantos pedidos de tutoria
+aguardam análise, e cada sala do tutor mostra quantos pedidos de entrada tem.
 
 ## Integração com o módulo de alunos
 
-O módulo de alunos é de outro grupo e será acoplado depois. O que já está preparado:
+O outro grupo desenvolveu em **Java / Spring Boot**, com um modelo de dados próprio
+(`Aluno` e `Professor` separados, nomes em `snake_case`, tabela `Niveis`). Esse modelo é
+incompatível com o daqui e **não deve ser aplicado ao banco**: o script deles cria `Turma` e
+`Atividade`, que já existem com outra estrutura.
 
-- O banco é compartilhado, então `database/schema.sql` é **somente aditivo** — sem `DROP` nem
-  `TRUNCATE`. A fonte da verdade é o servidor; o arquivo documenta.
-- Nenhuma consulta usa `SELECT *`. Colunas novas nas tabelas compartilhadas não alteram as
-  respostas desta API.
-- Todas as rotas de dados estão sob `/api`, então `/api/alunos` encaixa sem conflito.
-- O elo entre os dois módulos é `Turma.idTurma`. É essa a chave que a matrícula do aluno deve
-  referenciar — não criar outra.
-- A leitura da sessão está isolada em `routes/seguranca.py`. Se o módulo de alunos for uma
-  aplicação separada, o cookie não atravessa e vai ser preciso um contrato de token; trocar o
-  mecanismo mexe só nesse arquivo.
+A decisão foi aproveitar o **HTML e CSS** das telas deles e descartar o backend Java, já que
+esta aplicação cobre o que aquele fazia e ainda tem papéis, aprovação de tutoria, código de
+convite e correção automática.
+
+O que já está preparado para conviver com outro grupo no mesmo banco:
+
+- `database/schema.sql` é **somente aditivo** — sem `DROP` nem `TRUNCATE`
+- Nenhuma consulta usa `SELECT *`, então colunas novas não alteram as respostas desta API
+- Todas as rotas de dados estão sob `/api`
+- A leitura da sessão está isolada em `routes/seguranca.py`
 
 ## Próximos passos
 
-A seção 1 do documento de funcionalidades, **Contas e Permissões**, está completa: cadastro com
-gênero autodeclarado, login, solicitação de permissão de tutor, painel do administrador e
-aprovação/recusa que libera as funcionalidades de tutor.
-
-Ainda por fazer, já com tabelas prontas no banco:
-
-- Exercícios, listas e realização de listas
-- Ranking e participação em turma
-- `SolicitacaoEntrada`: aluno pedindo para entrar numa turma
-- Materiais de aula e relatórios
+- Portar as telas do outro grupo que não têm equivalente aqui: perfil, turmas disponíveis,
+  relatório e a visão de turma do estudante
+- Materiais de aula: os templates existem, mas ainda não têm rota nem tabela
+- Relatórios do tutor: desempenho por aluno e por questão
+- Ranking, usando as tabelas `Ranking` e `RealizarLista` que já existem
+- Telas `sobre`, `configuracoes` e `conta` ainda são o cartaz de "em manutenção"
 
 ## Scripts de apoio
 
@@ -251,9 +296,14 @@ Em `database/migracoes/`, todos para abrir no Workbench:
 
 Pontos a resolver com o grupo do banco:
 
-- `Turma.tipo` é `VARCHAR(100) NOT NULL` e ninguém documentou o que representa. O código
-  grava `"Regular"` (`TIPO_PADRAO` em `models/constantes.py`) até haver definição.
+- `Turma.nivel` e `Turma.tipo` guardam **a mesma informação**: o nível de escolaridade da
+  sala, um como código (1 a 5) e outro como texto. Enquanto as duas colunas existirem, o
+  código preenche `tipo` a partir de `nivel` (`rotulo_do_nivel` em `models/turma.py`), então
+  elas nunca ficam contraditórias. O certo, quando der, é apagar uma das duas — provavelmente
+  `tipo`, já que `nivel` é o que as consultas usam.
 - Os valores de `Solicitacao.status` foram assumidos como `0` pendente, `1` aprovada,
   `2` recusada. Confirmar.
-- `Turma.idSolicitacao` é `NOT NULL`, então só quem é tutor aprovado consegue criar turma.
+- `Turma.idSolicitacao` é `NOT NULL`, então só quem é tutor aprovado consegue criar sala.
   É coerente com o fluxo, mas amarra as duas coisas de forma rígida.
+- Acesso ao banco: todo mundo entra como `root`, e a porta 3306 aceita conexão de qualquer
+  lugar da internet. O conserto é uma conta por pessoa com permissão só no `IFisica`.

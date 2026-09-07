@@ -22,6 +22,8 @@ class Config:
     DB_NAME = os.getenv("DB_NAME")
     DB_POOL_SIZE = int(os.getenv("DB_POOL_SIZE", 5))
 
+    MAX_CONTENT_LENGTH = 4 * 1024 * 1024
+
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
     PERMANENT_SESSION_LIFETIME = timedelta(hours=8)

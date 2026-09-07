@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block titulo %}Sala | IFísica{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pagTurma.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<div id="pagina" data-id-turma="{{ id_turma }}">
+
+    <header class="topo">
+        {% include "_marca.html" %}
+        <div>
+            <h2 id="nomeTurma">Carregando…</h2>
+            <p id="infoTurma" class="info-turma"></p>
+        </div>
+        <a href="{{ url_for('pagina.telaInicial') }}">
+            <button type="button">Página inicial</button>
+        </a>
+    </header>
+
+    <p id="descricaoTurma" class="descricao-turma"></p>
+
+    <div class="convite" data-so-gerente hidden>
+        <span>Código de convite: <strong id="codigoConvite">------</strong></span>
+        <button type="button" id="botaoCopiar">Copiar código</button>
+    </div>
+
+    <span id="aviso" class="aviso"></span>
+
+    <div class="abas">
+        <button type="button" class="aba ativa" data-aba="alunos" data-so-gerente hidden>ALUNOS</button>
+        <button type="button" class="aba" data-aba="atividades">ATIVIDADES</button>
+    </div>
+
+    <section id="painelAlunos" class="painel" data-so-gerente hidden>
+
+        <div class="bloco" data-so-gerente hidden>
+            <h3>Pedidos de entrada <span id="contadorPedidos" class="contador">0</span></h3>
+            <ul id="listaPedidos" class="lista-cartoes"></ul>
+        </div>
+
+        <div class="bloco">
+            <h3>Alunos participantes <span id="contadorAlunos" class="contador">0</span></h3>
+            <ul id="listaAlunos" class="lista-cartoes"></ul>
+        </div>
+
+    </section>
+    <section id="painelAtividades" class="painel" hidden>
+
+        <div class="bloco">
+            <h3>Atividades da sala <span id="contadorAtividades" class="contador">0</span></h3>
+            <ul id="listaAtividades" class="lista-cartoes"></ul>
+        </div>
+
+        <div class="bloco" data-so-gerente hidden>
+            <h3>Banco de questões <span id="contadorExercicios" class="contador">0</span></h3>
+
+            <div class="filtros-exercicios">
+                <select id="filtroMateria">
+                    <option value="">Todas as matérias</option>
+                    <option>Cinemática</option>
+                    <option>Dinâmica</option>
+                    <option>Gravitação</option>
+                    <option>Estática</option>
+                    <option>Hidrostática</option>
+                    <option>Hidrodinâmica</option>
+                    <option>Termologia</option>
+                    <option>Ondulatória</option>
+                    <option>Movimento Harmônico Simples</option>
+                    <option>Óptica</option>
+                    <option>Eletrostática</option>
+                    <option>Eletrodinâmica</option>
+                    <option>Eletromagnetismo</option>
+                    <option>Física Moderna</option>
+                    <option>Análise Dimensional</option>
+                </select>
+            </div>
+
+            <ul id="listaExercicios" class="lista-cartoes lista-selecionavel"></ul>
+        </div>
+
+        <div class="bloco" data-so-gerente hidden>
+            <h3>Nova questão</h3>
+
+            <form id="formQuestao" novalidate>
+                <label for="perguntaQuestao">Enunciado</label>
+                <textarea id="perguntaQuestao" rows="4" required></textarea>
+
+                <label for="materiaQuestao">Matéria</label>
+                <select id="materiaQuestao" required>
+                    <option value="">Selecione…</option>
+                    <option>Cinemática</option>
+                    <option>Dinâmica</option>
+                    <option>Gravitação</option>
+                    <option>Estática</option>
+                    <option>Hidrostática</option>
+                    <option>Hidrodinâmica</option>
+                    <option>Termologia</option>
+                    <option>Ondulatória</option>
+                    <option>Movimento Harmônico Simples</option>
+                    <option>Óptica</option>
+                    <option>Eletrostática</option>
+                    <option>Eletrodinâmica</option>
+                    <option>Eletromagnetismo</option>
+                    <option>Física Moderna</option>
+                    <option>Análise Dimensional</option>
+                </select>
+
+                <label for="dificuldadeQuestao">Dificuldade</label>
+                <select id="dificuldadeQuestao" required>
+                    <option value="">Selecione…</option>
+                    <option>Fácil</option>
+                    <option>Médio</option>
+                    <option>Difícil</option>
+                </select>
+
+                <div class="linha-alternativa">
+                    <input type="radio" name="respostaCerta" id="certaA" value="A">
+                    <label for="certaA">A</label>
+                    <input type="text" id="alternativaA" placeholder="Alternativa A" required>
+                </div>
+                <div class="linha-alternativa">
+                    <input type="radio" name="respostaCerta" id="certaB" value="B">
+                    <label for="certaB">B</label>
+                    <input type="text" id="alternativaB" placeholder="Alternativa B" required>
+                </div>
+                <div class="linha-alternativa">
+                    <input type="radio" name="respostaCerta" id="certaC" value="C">
+                    <label for="certaC">C</label>
+                    <input type="text" id="alternativaC" placeholder="Alternativa C" required>
+                </div>
+                <div class="linha-alternativa">
+                    <input type="radio" name="respostaCerta" id="certaD" value="D">
+                    <label for="certaD">D</label>
+                    <input type="text" id="alternativaD" placeholder="Alternativa D" required>
+                </div>
+
+                <label for="imagemQuestao">Imagem (opcional)</label>
+                <input type="file" id="imagemQuestao" accept="image/png,image/jpeg,image/gif,image/webp">
+                <p class="dica-imagem">JPG, PNG, GIF ou WEBP, até 3 MB.</p>
+
+                <div id="previaImagem" class="previa-imagem" hidden>
+                    <img id="imagemAtual" alt="Imagem da questão">
+                    <button type="button" id="botaoRemoverImagem">Remover imagem</button>
+                </div>
+
+                <label for="resolucaoQuestao">Resolução (opcional)</label>
+                <textarea id="resolucaoQuestao" rows="3"
+                          placeholder="Explicação que o aluno verá depois de responder"></textarea>
+
+                <div class="botoes">
+                    <button type="button" id="botaoCancelarEdicaoQuestao" hidden>Cancelar edição</button>
+                    <input type="submit" id="botaoSalvarQuestao" value="Adicionar questão">
+                </div>
+            </form>
+        </div>
+
+        <div class="bloco" data-so-gerente hidden>
+            <h3>Nova atividade</h3>
+
+            <form id="formAtividade" novalidate>
+                <label for="nomeAtividade">Nome</label>
+                <input id="nomeAtividade" name="nomeAtividade" type="text"
+                       placeholder="Ex.: Lista de cinemática" required>
+
+                <label for="descricaoAtividade">Descrição (opcional)</label>
+                <textarea id="descricaoAtividade" name="descricaoAtividade" rows="2"></textarea>
+
+                <p class="selecionadas">
+                    Questões selecionadas: <strong id="contadorSelecionadas">0</strong>
+                </p>
+
+                <div class="botoes">
+                    <button type="button" id="botaoCancelarEdicaoAtividade" hidden>Cancelar edição</button>
+                    <input type="submit" id="botaoSalvarAtividade" value="Criar atividade">
+                </div>
+            </form>
+        </div>
+
+    </section>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pagTurma.js') }}"></script>
+{% endblock %}

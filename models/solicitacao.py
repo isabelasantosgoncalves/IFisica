@@ -112,3 +112,11 @@ def decidir(id_solicitacao, id_admin, aprovar):
     with obter_cursor(commit=True) as cursor:
         cursor.execute(sql, valores)
         return cursor.rowcount
+
+
+def contar_pendentes():
+    sql = "SELECT COUNT(*) AS total FROM Solicitacao WHERE status = %s"
+
+    with obter_cursor(dicionario=True) as cursor:
+        cursor.execute(sql, (SOLICITACAO_PENDENTE,))
+        return cursor.fetchone()["total"]

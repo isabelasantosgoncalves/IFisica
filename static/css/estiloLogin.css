@@ -6,33 +6,48 @@ body {
     margin-right: auto;
     width: 940px;
 }
+
 .container {
     margin: 0;
+    margin-top: 50px;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-    display: flex;
-    justify-content: center;  /* centraliza horizontal */
-    margin-top: 50px;  
-} 
+}
+
+#formLogin {
+    width: 100%;
+}
+
 .linha {
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
-} 
+}
+
 .botoes {
     display: flex;
-    justify-content: space-between; /* esquerda e direita */
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
     margin-top: 20px;
 }
-.botoes input,
-.botoes button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #4b63aa;
+
+.botoes button,
+.botoes input[type="submit"] {
+    background-color: #4a5aab;
     color: white;
-    font-weight: bold;
+    border: none;
+    padding: 10px 24px;
     border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
     cursor: pointer;
 }
+
+.botoes button:hover,
+.botoes input[type="submit"]:hover {
+    background-color: #3b4890;
+}
+
 fieldset {
     width: 300px;
     padding: 20px;

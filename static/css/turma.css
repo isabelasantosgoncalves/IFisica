@@ -51,36 +51,3 @@
 .login input::placeholder{
     color: rgb(220,220,220);
 }
-.descricao {
-    font-family: Arial;
-    width: 25%;
-    margin: 20px auto 0 auto;
-    text-align: left;
-    color: rgb(68, 64, 64);
-}
-
-.descricao label {
-    display: block;
-    margin-bottom: 6px;
-}
-
-.descricao textarea {
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid #3fa0d1;
-    border-radius: 10px;
-    padding: 8px;
-    font-family: Arial;
-    resize: vertical;
-}
-
-.situacao {
-    font-family: Arial;
-    width: 25%;
-    margin: 24px auto 0 auto;
-    padding: 14px 16px;
-    background-color: #e4f0f7;
-    border-left: 4px solid #3fa0d1;
-    border-radius: 0 8px 8px 0;
-    color: rgb(46, 43, 43);
-}

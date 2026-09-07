@@ -7,16 +7,18 @@
 {% endblock %}
 
 {% block conteudo %}
-<img src="{{ config.LOGO_URL }}" alt="Logo IFísica" width="100" class="img-canto">
+<img src="{{ url_for('static', filename='images/pinguim-ifisica.png') }}"
+     alt="IFísica" width="70" class="img-canto">
 
 <header>
-    <img src="{{ url_for('static', filename='images/banner-ifisica.jpeg') }}"
-         alt="IFísica para docentes" width="200">
+    <img src="{{ url_for('static', filename='images/pinguim-ifisica.png') }}"
+         alt="IFísica" width="80">
+    <h1 class="titulo-topo">IFísica</h1>
 
     <nav class="horizontal">
         <ul>
             <li><a href="{{ url_for('pagina.telaInicial') }}">Página inicial</a></li>
-            <li><a href="#">Ajuda</a></li>
+            <li><a href="{{ url_for('pagina.ajuda') }}">Ajuda</a></li>
             <li><a href="#">Configurações</a></li>
             <li><a href="#">Sobre</a></li>
             <li><a href="{{ url_for('pagina.sair') }}">Sair</a></li>
@@ -25,7 +27,34 @@
 </header>
 
 <h3>Olá, {{ nome }}!</h3>
+
+{% if administra and pendentesAdmin %}
+<p class="alerta-pendencia">
+    <a href="{{ url_for('pagina.painelAdmin') }}">
+        {{ pendentesAdmin }} pedido(s) de tutoria aguardando sua análise
+    </a>
+</p>
+{% endif %}
 <p class="papel">Seu papel na plataforma: <strong>{{ papel }}</strong></p>
+
+<section id="minhasSalas">
+    <h4>Salas em que você participa</h4>
+    <ul id="salas"></ul>
+    <span id="avisoSalas" class="aviso"></span>
+</section>
+
+<section id="entrarSala">
+    <h4>Entrar em uma sala</h4>
+    <p>Peça o código de convite para o professor responsável pela turma.</p>
+
+    <form id="formEntrarSala" novalidate>
+        <input id="codigoSala" name="codigoSala" type="text" maxlength="8"
+               placeholder="Ex.: A1B2C3D4" required>
+        <input type="submit" value="Entrar">
+    </form>
+
+    <span id="avisoEntrarSala" class="aviso"></span>
+</section>
 
 {% if ensina %}
 <section id="listaTurmas">
@@ -60,7 +89,12 @@
         <li><a href="{{ url_for('pagina.solicitarTutor') }}">Quero ser tutor</a></li>
         {% endif %}
         {% if administra %}
-        <li><a href="{{ url_for('pagina.painelAdmin') }}">Solicitações pendentes</a></li>
+        <li>
+            <a href="{{ url_for('pagina.painelAdmin') }}">
+                Solicitações pendentes
+                {% if pendentesAdmin %}<span class="selo-pendencia">{{ pendentesAdmin }}</span>{% endif %}
+            </a>
+        </li>
         {% endif %}
     </ul>
 </div>

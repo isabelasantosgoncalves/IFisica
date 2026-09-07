@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block titulo %}Responder atividade | IFísica{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/responderAtividade.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<div id="pagina" data-id-turma="{{ id_turma }}" data-id-atividade="{{ id_atividade }}">
+
+    <header class="topo">
+        {% include "_marca.html" %}
+        <div>
+            <h2 id="nomeAtividade">Carregando…</h2>
+            <p id="descricaoAtividade" class="info-turma"></p>
+        </div>
+        <a href="{{ url_for('pagina.telaInicial') }}">
+            <button type="button">Página inicial</button>
+        </a>
+    </header>
+
+    <span id="aviso" class="aviso"></span>
+
+    <section id="painelResultado" class="bloco" hidden>
+        <h3>Resultado</h3>
+        <p id="textoResultado"></p>
+        <ol id="listaCorrecao" class="lista-correcao"></ol>
+    </section>
+
+    <form id="formResponder" hidden>
+        <ol id="listaQuestoes" class="lista-questoes"></ol>
+
+        <div class="botoes">
+            <input type="submit" value="Enviar respostas">
+        </div>
+    </form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/responderAtividade.js') }}"></script>
+{% endblock %}

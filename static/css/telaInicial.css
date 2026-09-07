@@ -52,7 +52,8 @@ header {
         position: absolute; /* Posiciona em relação ao body */
         bottom: 10px;       /* Distância da parte inferior */
         right: 10px;        /* Distância da parte direita */
-        width: 150px;       /* Ajuste do tamanho */
+        width: 90px;        /* Ajuste do tamanho */
+        opacity: 0.9;
         height: auto;       /* Mantém proporção */
     }
 /* botão */
@@ -142,4 +143,107 @@ header {
     font-weight: bold;
     border-radius: 6px;
     cursor: pointer;
+}
+
+#entrarSala {
+    font-family: Arial;
+    max-width: 520px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    background-color: #eef7e6;
+    border-left: 4px solid #65c832;
+    border-radius: 0 8px 8px 0;
+}
+
+#entrarSala h4 { margin: 0 0 6px; }
+
+#entrarSala p { margin: 0 0 12px; line-height: 1.5; }
+
+#entrarSala form {
+    display: flex;
+    gap: 10px;
+}
+
+#entrarSala input[type="text"] {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #c8d6cc;
+    border-radius: 6px;
+    text-transform: uppercase;
+}
+
+#entrarSala input[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    background-color: #65c832;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#minhasSalas {
+    font-family: Arial;
+    max-width: 640px;
+    margin-top: 18px;
+}
+
+#minhasSalas ul,
+#listaTurmas ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#minhasSalas a,
+#listaTurmas a {
+    display: block;
+    padding: 10px 14px;
+    background-color: white;
+    border: 1px solid #d6dde2;
+    border-radius: 8px;
+    text-decoration: none;
+    color: rgb(46, 43, 43);
+}
+
+#minhasSalas a:hover,
+#listaTurmas a:hover {
+    border-color: #3fa0d1;
+}
+
+
+.titulo-topo {
+    margin: 0;
+    font-family: Arial;
+    font-size: 1.6rem;
+}
+
+.selo-pendencia {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 9px;
+    background-color: #c0392b;
+    color: white;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.alerta-pendencia {
+    font-family: Arial;
+    max-width: 640px;
+    margin: 0 0 14px;
+    padding: 10px 14px;
+    background-color: #fae5e3;
+    border-left: 4px solid #c0392b;
+    border-radius: 0 6px 6px 0;
+}
+
+.alerta-pendencia a {
+    color: #a8332c;
+    font-weight: bold;
+    text-decoration: none;
 }
